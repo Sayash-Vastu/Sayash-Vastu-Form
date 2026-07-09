@@ -226,6 +226,56 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .ai-ph-sub{font-size:11.5px;color:var(--muted);line-height:1.65;max-width:320px;margin:0 auto 14px;}
 .ai-score-preview{font-size:12.5px;font-weight:600;color:var(--muted);background:#fff;display:inline-block;padding:6px 16px;border-radius:20px;border:1px solid var(--border);}
 .ai-score-preview span{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;}
+.score-wrap{padding:9px 14px 14px;}
+.score-top{display:flex;align-items:center;gap:16px;margin-bottom:14px;}
+.score-circle{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0;border:4px solid var(--border);}
+.score-circle.sc-g{border-color:var(--green);background:var(--gbg);}
+.score-circle.sc-a{border-color:var(--amber);background:var(--abg);}
+.score-circle.sc-r{border-color:var(--red);background:var(--rbg);}
+.score-num{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;line-height:1;}
+.score-max{font-size:9px;color:var(--muted);}
+.score-grade{flex:1;}
+.score-grade-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:4px;}
+.score-grade-badge.sc-g{background:var(--gbg);color:var(--green);}
+.score-grade-badge.sc-a{background:var(--abg);color:var(--amber);}
+.score-grade-badge.sc-r{background:var(--rbg);color:var(--red);}
+.score-sub{font-size:10.5px;color:var(--muted);}
+.score-list-title{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:700;color:var(--muted);margin:10px 0 6px;}
+.score-item{font-size:12px;padding:3px 0;}
+.score-item.g{color:var(--green);}
+.score-item.r{color:var(--red);}
+.score-note{font-size:10px;color:var(--muted);font-style:italic;margin-top:10px;border-top:1px solid var(--border);padding-top:8px;}
+
+.report-doc{background:#fff;margin:14px;border-radius:10px;border:1px solid var(--border);overflow:hidden;text-align:left;}
+.report-head{background:var(--ink);padding:22px 20px;text-align:center;}
+.report-head .rh-title{font-family:'Cormorant Garamond',serif;color:#fff;font-size:19px;font-weight:700;letter-spacing:1px;}
+.report-head .rh-sub{color:var(--gold-l);font-size:11px;margin-top:4px;letter-spacing:1px;text-transform:uppercase;}
+.report-meta{display:flex;justify-content:space-between;padding:10px 20px;background:#FBF6E8;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);}
+.report-section{padding:14px 20px;border-bottom:1px solid var(--border);}
+.report-section:last-child{border-bottom:none;}
+.report-section-title{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;margin-bottom:10px;color:var(--ink);}
+.report-grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.report-block-title{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);font-weight:700;margin-bottom:6px;}
+.report-row{display:flex;justify-content:space-between;gap:8px;font-size:12px;padding:3px 0;border-bottom:1px dashed #EEE;}
+.report-row:last-child{border-bottom:none;}
+.rr-k{color:var(--muted);flex-shrink:0;}
+.rr-v{font-weight:600;text-align:right;}
+.rr-v.g{color:var(--green);}
+.rr-v.r{color:var(--red);}
+.rr-v.a{color:var(--amber);}
+.report-text-block{font-size:12px;line-height:1.6;color:var(--ink);white-space:pre-wrap;margin-bottom:8px;}
+.report-verdict-band{padding:14px 20px;text-align:center;font-weight:700;font-size:14px;}
+.report-verdict-band.g{background:var(--gbg);color:var(--green);}
+.report-verdict-band.a{background:var(--abg);color:var(--amber);}
+.report-verdict-band.r{background:var(--rbg);color:var(--red);}
+.report-footer{padding:16px 20px;font-size:10.5px;color:var(--muted);text-align:center;border-top:1px solid var(--border);line-height:1.6;}
+.report-actions{display:flex;gap:8px;padding:0 14px;margin:14px 0 4px;}
+.btn-print{flex:1;background:var(--ink);color:#fff;padding:12px;border:none;border-radius:9px;font-weight:600;font-size:13px;cursor:pointer;}
+@media print{
+  .nav,.report-actions,.btn-new,.suc-icon,.suc-title,.suc-sub{display:none!important;}
+  body{padding-bottom:0!important;background:#fff!important;}
+  .report-doc{margin:0;border:none;}
+}
 </style>
 </head>
 <body>
@@ -1083,13 +1133,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 
   <div class="card ai-card">
-    <div class="cl">🤖 AI Vastu Analysis & Rating</div>
-    <div class="ai-ph">
-      <div class="ai-lock">🔒</div>
-      <div class="ai-ph-title">AI Analysis Coming Soon</div>
-      <div class="ai-ph-sub">Once connected to the backend, this section will auto-generate a detailed Vastu analysis and score based on all inputs captured above.</div>
-      <div class="ai-score-preview">Vastu Score: <span>-- / 100</span></div>
-    </div>
+    <div class="cl">🕉 SVR™ Instant Vastu Score</div>
+    <div class="score-wrap" id="ai-result"></div>
   </div>
 
   <div class="sum-panel">
@@ -1101,9 +1146,10 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 
 <div class="success" id="success">
   <div class="suc-icon">✅</div>
-  <div class="suc-title">Report Submitted!</div>
-  <div class="suc-sub">Built-up property audit recorded.<br>MIS team will receive this data.</div>
-  <div class="ref-box" id="suc-detail"></div>
+  <div class="suc-title">Report Generated!</div>
+  <div class="suc-sub">Review, print, or save this audit report below.</div>
+  <div class="report-actions"><button class="btn-print" onclick="window.print()">🖨 Print / Save as PDF</button></div>
+  <div id="report-doc"></div>
   <button class="btn-new" onclick="location.reload()">+ New Audit</button>
 </div>
 
@@ -1174,12 +1220,14 @@ function go(d){
   updUI();window.scrollTo(0,0);
 }
 
+const FS={};
 function chip(el,key,val,cls){
   const g=el.closest('.chips');
   g.querySelectorAll('.chip').forEach(c=>c.className='chip');
   el.classList.add('o'+cls);
   document.getElementById(key)&&(document.getElementById(key).value=val);
   FD[key]=val;
+  FS[key]=cls;
 }
 
 function opt(el,key,val,cls){
@@ -1189,6 +1237,7 @@ function opt(el,key,val,cls){
   el.querySelector('input').checked=true;
   document.getElementById(key)&&(document.getElementById(key).value=val);
   FD[key]=val;
+  FS[key]=cls||'g';
 }
 
 function dirBtn(el,key,val,cls){
@@ -1197,6 +1246,7 @@ function dirBtn(el,key,val,cls){
   el.classList.add('o'+cls);
   document.getElementById(key)&&(document.getElementById(key).value=val);
   FD[key]=val;
+  FS[key]=cls;
 }
 
 function multi(el,key,val){
@@ -1246,6 +1296,127 @@ function buildSum(){
     else if(v.includes('⚠')||v.includes('Conditional'))cl='a';
     return`<div class="sp-row"><span class="sk">${k}</span><span class="sv ${cl}">${v||'—'}</span></div>`;
   }).join('');
+  renderAIScore();
+}
+
+const SCORE_FIELDS={facing:10,corner:5,'setback-bal':5,brahma:8,'stair-zone':6,'stair-dir':3,'lift-zone':6,'toilet-ne':8,'dg-zone':8,'stp-zone':4,'ugt-zone':5,'oht-zone':5,'entry-dir':8,'entry-pos':2,'ramp-zone':4,'ramp-slope':3,drain2:3,water2:2,pole2:2,ht2:2,temple2:2,cem2:2};
+const FIELD_LABELS={facing:'Building Facing',corner:'Corner Plot Type','setback-bal':'Setback Balance',brahma:'Brahmasthan (Centre)','stair-zone':'Staircase Location','stair-dir':'Staircase Direction','lift-zone':'Lift Location','toilet-ne':'NE Toilet Check','dg-zone':'DG Set Location','stp-zone':'STP Location','ugt-zone':'Water Tank (UGT) Location','oht-zone':'Overhead Tank (OHT) Location','entry-dir':'Main Entry Direction','entry-pos':'Main Entry Position','ramp-zone':'Ramp Location','ramp-slope':'Ramp Slope Direction',drain2:'Drainage Zone',water2:'Water Body Proximity',pole2:'Electric Pole Position',ht2:'HT Wire Proximity',temple2:'Temple Shadow',cem2:'Cemetery Proximity'};
+
+function computeVastuScore(){
+  let totalW=0,earned=0;const strengths=[],concerns=[];
+  for(const key in SCORE_FIELDS){
+    const cls=FS[key];
+    if(!cls||cls==='b')continue;
+    const w=SCORE_FIELDS[key];
+    totalW+=w;
+    if(cls==='g'){earned+=w;strengths.push(key);}
+    else if(cls==='a'){earned+=w*0.5;}
+    else if(cls==='r'){concerns.push(key);}
+  }
+  const score=totalW>0?Math.round(earned/totalW*100):null;
+  return{score,strengths,concerns,answered:totalW>0};
+}
+
+function renderAIScore(){
+  const el=document.getElementById('ai-result');
+  if(!el)return;
+  const r=computeVastuScore();
+  if(!r.answered){
+    el.innerHTML='<div style="text-align:center;color:var(--muted);font-size:12px;padding:10px 0;">Fill in the site details above to see the instant Vastu score here.</div>';
+    return;
+  }
+  const grade=r.score>=80?'g':r.score>=55?'a':'r';
+  const gradeText=r.score>=80?'Strong Vastu Compliance':r.score>=55?'Moderate — Rectification Advised':'Weak — Major Rectification Needed';
+  let html='<div class="score-top"><div class="score-circle sc-'+grade+'"><div class="score-num">'+r.score+'</div><div class="score-max">/ 100</div></div><div class="score-grade"><div class="score-grade-badge sc-'+grade+'">'+gradeText+'</div><div class="score-sub">Based on '+Object.keys(SCORE_FIELDS).filter(k=>FS[k]&&FS[k]!=='b').length+' assessed parameters</div></div></div>';
+  if(r.strengths.length){
+    html+='<div class="score-list-title">✅ Key Strengths</div>';
+    r.strengths.forEach(k=>{html+='<div class="score-item g">• '+(FIELD_LABELS[k]||k)+'</div>';});
+  }
+  if(r.concerns.length){
+    html+='<div class="score-list-title">⚠️ Key Concerns</div>';
+    r.concerns.forEach(k=>{html+='<div class="score-item r">• '+(FIELD_LABELS[k]||k)+'</div>';});
+  }
+  html+='<div class="score-note">This is an automated SVR™ Instant Score based on your site observations. A detailed narrative AI report can be layered in once connected to the analysis backend.</div>';
+  el.innerHTML=html;
+}
+
+function fld(key,label){
+  const v=FD[key];
+  if(!v)return '';
+  let cl='';
+  if(v.includes('✓')||v.includes('Best')||v.includes('Suitable')||v.includes('Auspicious')||v.includes('Correct')||v.includes('Good')||v.includes('Clear')||v.includes('None'))cl='g';
+  else if(v.includes('✗')||v.includes('Not Recommended')||v.includes('Issue')||v.includes('Avoid'))cl='r';
+  else if(v.includes('⚠'))cl='a';
+  return '<div class="report-row"><span class="rr-k">'+label+'</span><span class="rr-v '+cl+'">'+v+'</span></div>';
+}
+
+function fldMulti(key,label){
+  const v=FD[key];
+  if(!v)return '';
+  return '<div class="report-row"><span class="rr-k">'+label+'</span><span class="rr-v">'+v+'</span></div>';
+}
+
+function buildReportHTML(id){
+  const r=computeVastuScore();
+  const grade=r.answered?(r.score>=80?'g':r.score>=55?'a':'r'):'';
+  const vc=FD['verdict']||'Not specified';
+  const vcCl=vc.includes('Suitable')?'g':vc.includes('Not Rec')?'r':'a';
+  let h='';
+  h+='<div class="report-doc">';
+  h+='<div class="report-head"><div class="rh-title">SAYASH VASTU</div><div class="rh-sub">Built-Up Property Vastu Audit Report</div></div>';
+  h+='<div class="report-meta"><span>Ref: '+id+'</span><span>Date: '+(tv('f-date')||new Date().toLocaleDateString('en-IN'))+'</span></div>';
+  h+='<div class="report-section"><div class="report-grid2">';
+  h+='<div><div class="report-block-title">Client Details</div>';
+  h+='<div class="report-row"><span class="rr-k">Name</span><span class="rr-v">'+(tv('f-cl-name')||'—')+'</span></div>';
+  h+='<div class="report-row"><span class="rr-k">Contact Person</span><span class="rr-v">'+(tv('f-cl-contact')||'—')+'</span></div>';
+  h+='<div class="report-row"><span class="rr-k">Mobile</span><span class="rr-v">'+(tv('f-cl-phone')||'—')+'</span></div>';
+  h+='<div class="report-row"><span class="rr-k">Email</span><span class="rr-v">'+(tv('f-cl-email')||'—')+'</span></div>';
+  h+='<div class="report-row"><span class="rr-k">City / State</span><span class="rr-v">'+(tv('f-cl-city')||'—')+', '+(tv('f-cl-state')||'—')+'</span></div>';
+  h+='</div>';
+  h+='<div><div class="report-block-title">Property Details</div>';
+  h+='<div class="report-row"><span class="rr-k">Property Name</span><span class="rr-v">'+(tv('f-propname')||'—')+'</span></div>';
+  h+='<div class="report-row"><span class="rr-k">Type</span><span class="rr-v">'+(FD['prop-type']||'—')+'</span></div>';
+  h+='<div class="report-row"><span class="rr-k">City / State</span><span class="rr-v">'+(tv('f-city')||'—')+', '+(tv('f-state')||'—')+'</span></div>';
+  h+='<div class="report-row"><span class="rr-k">Built-up Area</span><span class="rr-v">'+(tv('f-bua')||'—')+'</span></div>';
+  h+='<div class="report-row"><span class="rr-k">Floors (Up/Down)</span><span class="rr-v">'+(tv('f-floors-up')||'0')+' / '+(tv('f-floors-dn')||'0')+'</span></div>';
+  h+='<div class="report-row"><span class="rr-k">Inspector</span><span class="rr-v">'+(tv('f-iname')||'—')+'</span></div>';
+  h+='</div></div></div>';
+  if(r.answered){
+    h+='<div class="report-section"><div class="report-section-title">🕉 SVR™ Instant Vastu Score</div>';
+    h+='<div class="score-top"><div class="score-circle sc-'+grade+'"><div class="score-num">'+r.score+'</div><div class="score-max">/ 100</div></div><div class="score-grade"><div class="score-grade-badge sc-'+grade+'">'+(r.score>=80?'Strong Vastu Compliance':r.score>=55?'Moderate — Rectification Advised':'Weak — Major Rectification Needed')+'</div></div></div>';
+    h+='</div>';
+  }
+  h+='<div class="report-section"><div class="report-section-title">Site Facing & Land</div>';
+  h+=fld('facing','Building Facing')+fld('corner','Corner Plot')+fldMulti('road-sides','Road Sides')+fld('flyover','Flyover/Metro');
+  h+='</div>';
+  h+='<div class="report-section"><div class="report-section-title">Building Shape & Setbacks</div>';
+  h+=fld('bldg-shape','Shape')+fld('bldg-cut','Cut Corner')+fld('setback-bal','Setback Balance')+fld('brahma','Brahmasthan');
+  h+='</div>';
+  h+='<div class="report-section"><div class="report-section-title">Cores — Stairs, Lifts, Toilets</div>';
+  h+=fld('stair-zone','Staircase Zone')+fld('stair-dir','Staircase Direction')+fld('lift-zone','Lift Zone')+fldMulti('toilet-zones','Toilet Zones')+fld('toilet-ne','NE Toilet Check');
+  h+='</div>';
+  h+='<div class="report-section"><div class="report-section-title">Utilities</div>';
+  h+=fld('dg-zone','DG Set Zone')+fld('stp-zone','STP Zone')+fld('etp-zone','ETP Zone')+fld('ugt-zone','UG Water Tank')+fld('fire-tank-zone','Fire Tank')+fld('oht-zone','Overhead Tank')+fld('elec-zone','Electrical Panel')+fld('pump-zone','Pump Room');
+  h+='</div>';
+  h+='<div class="report-section"><div class="report-section-title">Ramp, Entry & Parking</div>';
+  h+=fld('entry-dir','Main Entry Direction')+fld('entry-pos','Entry Position')+fld('ramp-zone','Ramp Zone')+fld('ramp-slope','Ramp Slope')+fldMulti('parking-zones','Parking Zones');
+  h+='</div>';
+  h+='<div class="report-section"><div class="report-section-title">Site Surroundings</div>';
+  h+=fld('drain2','Drainage')+fld('water2','Water Body')+fld('pole2','Electric Pole')+fld('ht2','HT Wire')+fld('temple2','Temple Shadow')+fld('cem2','Cemetery Proximity');
+  h+='</div>';
+  const pos=tv('f-pos'),neg=tv('f-neg'),crit=tv('f-crit'),rem=tv('f-rem');
+  if(pos||neg||crit||rem){
+    h+='<div class="report-section"><div class="report-section-title">Key Findings</div>';
+    if(pos)h+='<div class="report-block-title">Positives</div><div class="report-text-block">'+pos+'</div>';
+    if(neg)h+='<div class="report-block-title">Issues</div><div class="report-text-block">'+neg+'</div>';
+    if(crit)h+='<div class="report-block-title">Critical</div><div class="report-text-block">'+crit+'</div>';
+    if(rem)h+='<div class="report-block-title">Overall Remarks</div><div class="report-text-block">'+rem+'</div>';
+    h+='</div>';
+  }
+  h+='<div class="report-verdict-band '+vcCl+'">Final Recommendation: '+vc+'</div>';
+  h+='<div class="report-footer">This report has been prepared by Sayash Vastu certified inspector <b>'+(tv('f-iname')||'—')+'</b> for internal &amp; client Vastu assessment purposes.<br>Sayash Vastu · Big Jo\'s Tower, Netaji Subhash Place, Delhi</div>';
+  h+='</div>';
+  return h;
 }
 
 function genId(){return'SVA-'+Math.random().toString(36).substr(2,6).toUpperCase()+'-'+new Date().getFullYear();}
