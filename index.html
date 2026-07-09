@@ -19,7 +19,6 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:110px;}
 
-/* ============ ANIMATIONS ============ */
 @keyframes floatGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.55;}50%{transform:translate(-50%,-50%) scale(1.2);opacity:.85;}}
 @keyframes floatGlow2{0%,100%{transform:translate(50%,50%) scale(1);opacity:.4;}50%{transform:translate(50%,50%) scale(1.25);opacity:.7;}}
 @keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
@@ -29,7 +28,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 @keyframes bounceDown{0%,100%{transform:translateY(0);opacity:.5;}50%{transform:translateY(6px);opacity:1;}}
 @keyframes sparkle{0%,100%{opacity:.25;transform:scale(.9);}50%{opacity:.9;transform:scale(1.1);}}
 
-/* ============ BRAND HERO / INTRO ============ */
 .intro{display:block;}
 .intro.hide{display:none;}
 .bh{background:radial-gradient(ellipse 130% 100% at 50% -20%,#FFF6EA 0%,#FCEFD8 45%,#F7F2E8 100%);padding:40px 20px 30px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid #F0DFB8;}
@@ -83,19 +81,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 .intro-foot{text-align:center;padding:0 30px 24px;font-size:10.5px;color:var(--muted);line-height:1.7;}
 .intro-foot b{color:var(--gold-d);}
 
-/* ============ FORM WRAP ============ */
 .formwrap{display:none;}
 .formwrap.on{display:block;}
 
-/* HEADER */
 .hdr{background:var(--ink);padding:14px 18px 12px;position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:10px;}
 .hdr-icon{font-size:22px;}
-.hdr-wrap{flex:1;}
+.hdr-wrap{flex:1;text-align:center;}
 .hdr-brand{font-family:'Cormorant Garamond',serif;color:var(--gold-l);font-size:15px;line-height:1;}
 .hdr-sub{color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
 .hdr-badge{background:rgba(255,255,255,.08);border-radius:5px;padding:3px 9px;font-size:10px;color:#CCC;}
 
-/* PROGRESS */
 .prog-wrap{background:var(--ink);padding:0 18px 14px;}
 .prog-bar{display:flex;gap:3px;}
 .pb{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.12);transition:background .3s;}
@@ -104,11 +99,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 .prog-info{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:#888;}
 .prog-info b{color:var(--gold-l);}
 
-/* STEPS */
 .step{display:none;}
 .step.on{display:block;}
 
-/* STEP HEADER */
 .sh{display:flex;align-items:center;gap:10px;padding:16px 18px 12px;}
 .si{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
 .si.gold{background:#FFF5D0;}
@@ -121,11 +114,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-
 .sh-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;line-height:1.2;}
 .sh-sub{font-size:11px;color:var(--muted);margin-top:1px;}
 
-/* CARD */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin:0 14px 12px;overflow:hidden;}
 .cl{padding:9px 14px 0;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:600;}
 
-/* FIELDS */
 .f{padding:9px 14px 11px;}
 .f label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;line-height:1.4;}
 .f .req{color:var(--red);}
@@ -143,7 +134,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
 
-/* CHIPS */
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px;}
 .chip{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:500;border:1.5px solid var(--border);background:#FAFAF5;cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none;}
 .chip:hover{border-color:var(--gold);}
@@ -153,7 +143,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .chip.ob{border-color:var(--blue);background:var(--bbg);color:var(--blue);}
 .chip.op{border-color:var(--purple);background:var(--pbg);color:var(--purple);}
 
-/* OPT ROWS */
 .opts{display:flex;flex-direction:column;gap:7px;}
 .opt{display:flex;align-items:center;gap:10px;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .15s;background:#FAFAF5;user-select:none;}
 .opt:hover{border-color:var(--gold);background:#FFFBEF;}
@@ -166,14 +155,12 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .opt-main{font-size:12.5px;font-weight:500;}
 .opt-sub{font-size:11px;color:var(--muted);margin-top:1px;}
 
-/* VASTU NOTES */
 .vn{display:flex;gap:8px;align-items:flex-start;border-radius:7px;padding:8px 10px;margin-top:5px;font-size:11px;line-height:1.5;}
 .vn.g{background:var(--gbg);border:1px solid #B0D8C0;color:var(--green);}
 .vn.a{background:var(--abg);border:1px solid #F0C870;color:var(--amber);}
 .vn.r{background:var(--rbg);border:1px solid #F0C0C0;color:var(--red);}
 .vn.b{background:#FFFBEF;border:1px solid #E8D490;color:#6B5000;}
 
-/* DIRECTION GRID */
 .dir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:280px;margin:0 auto;}
 .dir-btn{border:1.5px solid var(--border);border-radius:8px;padding:10px 4px;text-align:center;cursor:pointer;background:#FAFAF5;font-size:11px;font-weight:600;transition:all .15s;user-select:none;}
 .dir-btn:hover{border-color:var(--gold);background:#FFFBEF;}
@@ -184,15 +171,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .dir-btn.ob{border-color:var(--blue);background:var(--bbg);color:var(--blue);}
 .dir-btn.NA{opacity:.5;}
 
-/* SETBACK */
 .setback-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
 .setback-item label{font-size:11px;color:var(--muted);margin-bottom:4px;display:block;}
 
-/* MIS TAG */
-.mis{background:var(--bbg);border:1px solid #C0D0F0;border-radius:7px;padding:8px 12px;margin:0 14px 10px;font-size:10px;color:var(--blue);line-height:1.6;}
-.mis b{display:block;margin-bottom:1px;font-size:10px;}
+.mis{display:none;}
 
-/* NAV */
 .nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:11px 14px 18px;display:flex;gap:8px;align-items:center;z-index:100;}
 .btn{flex:1;padding:12px 14px;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
 .btn-p{background:var(--bg);color:var(--ink);border:1.5px solid var(--border);flex:0 0 auto;padding:12px 18px;}
@@ -200,7 +183,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .btn-s{background:var(--green);color:#fff;}
 .step-ct{font-size:11px;color:var(--muted);flex:0 0 auto;padding:0 2px;}
 
-/* SUCCESS */
 .success{display:none;padding:40px 18px;text-align:center;}
 .success.on{display:block;}
 .suc-icon{font-size:60px;margin-bottom:14px;}
@@ -213,7 +195,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .rv{font-weight:600;}
 .btn-new{background:var(--ink);color:#fff;padding:13px 30px;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:6px;}
 
-/* summary panel */
 .sum-panel{background:var(--ink);border-radius:var(--r);margin:0 14px 12px;padding:14px;}
 .sp-title{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold-l);margin-bottom:10px;}
 .sp-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:11px;}
@@ -224,7 +205,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .sv.a{color:#F0A040;}
 .sv.r{color:#E06060;}
 
-/* photo */
 .pu{border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;background:#FAFAF5;}
 .pu:hover{border-color:var(--gold);background:#FFFBEF;}
 .pu input{display:none;}
@@ -234,13 +214,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .photo-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
 .photo-row img{width:60px;height:60px;border-radius:6px;object-fit:cover;border:1px solid var(--border);}
 
-/* selected-type readonly display */
 .sel-type-box{display:flex;align-items:center;justify-content:space-between;background:#FFFBEF;border:1.5px solid var(--gold);border-radius:8px;padding:9px 12px;margin:9px 14px 0;}
 .sel-type-box .stx-l{font-size:12.5px;font-weight:600;}
 .sel-type-box .stx-l span{display:block;font-size:9px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
 .sel-type-box .stx-chg{font-size:11px;color:var(--blue);font-weight:600;cursor:pointer;}
 
-/* AI placeholder card */
 .ai-card{border-color:var(--gold);}
 .ai-ph{border:1.5px dashed var(--border);border-radius:10px;padding:26px 16px;text-align:center;background:#FCFAF3;margin:9px 14px 12px;}
 .ai-lock{font-size:26px;margin-bottom:8px;}
@@ -252,7 +230,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 </head>
 <body>
 
-<!-- ═══════════════ INTRO / BRAND / TYPE SELECT ═══════════════ -->
 <div class="intro" id="intro">
   <div class="bh">
     <div class="bh-bg-glow g1"></div>
@@ -313,10 +290,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   <div class="intro-foot">This report is prepared exclusively by <b>Sayash Vastu</b> certified inspectors for internal &amp; client Vastu assessment purposes.</div>
 </div>
 
-<!-- ═══════════════ FORM WRAP ═══════════════ -->
 <div class="formwrap" id="formwrap">
 
-<!-- HEADER -->
 <div class="hdr">
   <div class="hdr-icon">🕉</div>
   <div class="hdr-wrap">
@@ -326,13 +301,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   <div class="hdr-badge" id="ref-tag">New</div>
 </div>
 
-<!-- PROGRESS -->
 <div class="prog-wrap">
   <div class="prog-bar" id="prog-bar"></div>
   <div class="prog-info"><b id="step-name">Step 1</b><span id="pct-txt">0% done</span></div>
 </div>
 
-<!-- ═══════ STEP 0 — CLIENT DETAILS ═══════ -->
 <div class="step on" id="st0">
   <div class="sh"><div class="si pur">🤝</div><div><div class="sh-title">Client Details</div><div class="sh-sub">Client / company information for this audit</div></div></div>
   <div class="mis"><b>🖥 MIS Fields</b>client_name · contact_person · designation · client_phone · client_alt_phone · client_email · client_address · client_city · client_state · lead_source · client_notes</div>
@@ -373,7 +346,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 </div>
 
-<!-- ═══════ STEP 1 — PROPERTY BASICS ═══════ -->
 <div class="step" id="st1">
   <div class="sh"><div class="si gold">🏢</div><div><div class="sh-title">Property Basic Info</div><div class="sh-sub">Fill before reaching the site</div></div></div>
   <div class="mis"><b>🖥 MIS Fields</b>inspector_name · phone · site_name · city · state · address · property_type · floors_above · floors_below · total_built_area · visit_date · vr_ref · client</div>
@@ -421,7 +393,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 </div>
 
-<!-- ═══════ STEP 2 — SITE FACING & LAND ═══════ -->
 <div class="step" id="st2">
   <div class="sh"><div class="si gold">🧭</div><div><div class="sh-title">Site Facing & Land</div><div class="sh-sub">Same checks as open land + additional built-up checks</div></div></div>
   <div class="mis"><b>🖥 MIS Fields</b>site_facing · corner_type · road_sides · slope · south_zone · sw_zone · t_point · flyover_zone · metro_zone</div>
@@ -488,7 +459,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 </div>
 
-<!-- ═══════ STEP 3 — BUILDING SHAPE & SETBACKS ═══════ -->
 <div class="step" id="st3">
   <div class="sh"><div class="si grn">📐</div><div><div class="sh-title">Building Shape & Setbacks</div><div class="sh-sub">Shape of structure + open space in all 4 directions</div></div></div>
   <div class="mis"><b>🖥 MIS Fields</b>building_shape · setback_north · setback_south · setback_east · setback_west · extension_ne · cut_ne · extension_sw · cut_sw · brahmasthan_clear</div>
@@ -563,7 +533,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 </div>
 
-<!-- ═══════ STEP 4 — CORES ═══════ -->
 <div class="step" id="st4">
   <div class="sh"><div class="si blu">🪜</div><div><div class="sh-title">Cores — Stairs, Lifts & Toilets</div><div class="sh-sub">Location in the building is critical for Vastu</div></div></div>
   <div class="mis"><b>🖥 MIS Fields</b>staircase_zone · staircase_direction · lift_zone · toilet_zones · toilet_count · service_core_location</div>
@@ -677,7 +646,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 </div>
 
-<!-- ═══════ STEP 5 — UTILITIES ═══════ -->
 <div class="step" id="st5">
   <div class="sh"><div class="si org">⚡</div><div><div class="sh-title">Utilities Placement</div><div class="sh-sub">DG · STP · ETP · Water Tanks · Fire Tanks · OHT</div></div></div>
   <div class="mis"><b>🖥 MIS Fields</b>dg_zone · dg_count · stp_zone · etp_zone · ug_water_tank_zone · ug_fire_tank_zone · oht_zone · oht_direction · pump_room_zone · electrical_panel_zone · transformer_zone</div>
@@ -856,7 +824,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 </div>
 
-<!-- ═══════ STEP 6 — RAMP & ENTRY ═══════ -->
 <div class="step" id="st6">
   <div class="sh"><div class="si pur">🚗</div><div><div class="sh-title">Ramp, Entry & Parking</div><div class="sh-sub">Vehicle access, ramp direction & main entry placement</div></div></div>
   <div class="mis"><b>🖥 MIS Fields</b>main_entry_zone · main_entry_direction · ramp_location · ramp_slope_direction · basement_entry_zone · emergency_entry_zone · parking_zone</div>
@@ -965,7 +932,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 </div>
 
-<!-- ═══════ STEP 7 — SURROUNDINGS ═══════ -->
 <div class="step" id="st7">
   <div class="sh"><div class="si red">🏙️</div><div><div class="sh-title">Site Surroundings</div><div class="sh-sub">External factors affecting the built property</div></div></div>
   <div class="mis"><b>🖥 MIS Fields</b>drainage_zone · water_body · flyover_zone · pole_front · ht_wire · temple_shadow · cemetery · neighbour_heights · road_sides</div>
@@ -1059,7 +1025,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 </div>
 
-<!-- ═══════ STEP 8 — PHOTOS & VERDICT ═══════ -->
 <div class="step" id="st8">
   <div class="sh"><div class="si teal">📸</div><div><div class="sh-title">Photos & Final Assessment</div><div class="sh-sub">Upload site photos and give overall recommendation</div></div></div>
   <div class="mis"><b>🖥 MIS Fields</b>photos[] · key_positives · key_negatives · critical_issues · overall_remarks · final_recommendation · vastu_score_estimate · submitted_at</div>
@@ -1076,6 +1041,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
       </div>
       <div class="photo-row" id="photo-prev"></div>
     </div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>Site Location (Map Link / GPS)</label><input type="text" id="f-location" placeholder="Google Maps link or lat,long"></div><div><label>Attached File URL</label><input type="text" id="f-fileurl" placeholder="Drive link for large files"></div></div></div>
   </div>
 
   <div class="card">
@@ -1112,15 +1079,13 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
     </div>
   </div>
 
-  <!-- LIVE SUMMARY -->
   <div class="sum-panel">
     <div class="sp-title">🕉 Submission Preview</div>
     <div id="sum-rows"></div>
   </div>
 
-</div><!-- /step 8 -->
+</div>
 
-<!-- SUCCESS -->
 <div class="success" id="success">
   <div class="suc-icon">✅</div>
   <div class="suc-title">Report Submitted!</div>
@@ -1129,14 +1094,13 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   <button class="btn-new" onclick="location.reload()">+ New Audit</button>
 </div>
 
-<!-- NAV BAR -->
 <div class="nav" id="nav">
   <button class="btn btn-p" id="btn-p" onclick="go(-1)">← Back</button>
   <div class="step-ct" id="step-ct">1/9</div>
   <button class="btn btn-n" id="btn-n" onclick="go(1)">Next →</button>
 </div>
 
-</div><!-- /formwrap -->
+</div>
 
 <script>
 const STEPS=9;
@@ -1289,6 +1253,7 @@ function submit(){
     access:{entry_direction:FD['entry-dir'],entry_position:FD['entry-pos'],emergency_entry:FD['emrg-dir'],ramp_present:FD['ramp-present'],ramp_zone:FD['ramp-zone'],ramp_slope:FD['ramp-slope'],ramp_notes:tv('f-ramp-notes'),parking_zones:FD['parking-zones']},
     surroundings:{drainage:FD['drain2'],water_body:FD['water2'],pole:FD['pole2'],ht_wire:FD['ht2'],temple:FD['temple2'],cemetery:FD['cem2'],neighbour_n:tv('f-nh-n'),neighbour_e:tv('f-nh-e'),neighbour_s:tv('f-nh-s'),neighbour_sw:tv('f-nh-sw')},
     assessment:{positives:tv('f-pos'),negatives:tv('f-neg'),critical:tv('f-crit'),remarks:tv('f-rem'),verdict:FD['verdict']},
+    attachments:{location:tv('f-location'),file_url:tv('f-fileurl')},
     ai_analysis:{status:'pending_backend_integration',score:null}
   };
   console.log('MIS PAYLOAD →',JSON.stringify(payload,null,2));
