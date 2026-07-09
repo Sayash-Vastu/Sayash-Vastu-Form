@@ -329,6 +329,19 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   </div>
 
   <div class="card">
+    <div class="cl">Personal & Family Details</div>
+    <div class="f"><div class="row2"><div><label>Client Date of Birth</label><input type="date" id="f-cl-dob"></div><div><label>Anniversary Date</label><input type="date" id="f-cl-anniv"></div></div></div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>Spouse Name</label><input type="text" id="f-cl-spouse-name" placeholder="Spouse full name"></div><div><label>Spouse Date of Birth</label><input type="date" id="f-cl-spouse-dob"></div></div></div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>Child 1 Name</label><input type="text" id="f-cl-child1-name" placeholder="Name"></div><div><label>Child 1 DOB</label><input type="date" id="f-cl-child1-dob"></div></div></div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>Child 2 Name</label><input type="text" id="f-cl-child2-name" placeholder="Optional"></div><div><label>Child 2 DOB</label><input type="date" id="f-cl-child2-dob"></div></div></div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>Child 3 Name</label><input type="text" id="f-cl-child3-name" placeholder="Optional"></div><div><label>Child 3 DOB</label><input type="date" id="f-cl-child3-dob"></div></div></div>
+  </div>
+
+  <div class="card">
     <div class="cl">Lead Source</div>
     <div class="f">
       <div class="chips">
@@ -1243,7 +1256,7 @@ function submit(){
     submission_id:id,
     form_type:'built_up_property',
     submitted_at:new Date().toISOString(),
-    client:{name:tv('f-cl-name'),contact_person:tv('f-cl-contact'),designation:tv('f-cl-designation'),phone:tv('f-cl-phone'),alt_phone:tv('f-cl-altphone'),email:tv('f-cl-email'),address:tv('f-cl-address'),city:tv('f-cl-city'),state:tv('f-cl-state'),lead_source:FD['lead-source'],notes:tv('f-cl-notes')},
+    client:{name:tv('f-cl-name'),contact_person:tv('f-cl-contact'),designation:tv('f-cl-designation'),phone:tv('f-cl-phone'),alt_phone:tv('f-cl-altphone'),email:tv('f-cl-email'),address:tv('f-cl-address'),city:tv('f-cl-city'),state:tv('f-cl-state'),dob:tv('f-cl-dob'),anniversary:tv('f-cl-anniv'),spouse_name:tv('f-cl-spouse-name'),spouse_dob:tv('f-cl-spouse-dob'),children:[{name:tv('f-cl-child1-name'),dob:tv('f-cl-child1-dob')},{name:tv('f-cl-child2-name'),dob:tv('f-cl-child2-dob')},{name:tv('f-cl-child3-name'),dob:tv('f-cl-child3-dob')}],lead_source:FD['lead-source'],notes:tv('f-cl-notes')},
     inspector:{name:tv('f-iname'),phone:tv('f-phone'),email:tv('f-email')},
     property:{name:tv('f-propname'),city:tv('f-city'),state:tv('f-state'),address:tv('f-addr'),type:FD['prop-type'],floors_above:tv('f-floors-up'),floors_below:tv('f-floors-dn'),bua:tv('f-bua'),plot_area:tv('f-plotarea'),visit_date:tv('f-date'),vr_ref:tv('f-vrno')},
     facing:{direction:FD['facing'],degree:tv('f-deg'),corner:FD['corner'],road_sides:FD['road-sides'],flyover:FD['flyover']},
