@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sayash Vastu — Built-Up Property Audit</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#150C00;--gold:#C49A0A;--gold-l:#E9C868;--gold-d:#8A6B00;
+  --bg:#F7F2E8;--card:#FFF;--border:#DDD0A8;--muted:#9A8A6A;
+  --green:#1E6B40;--gbg:#E8F5EE;
+  --amber:#A05000;--abg:#FFF4E0;
+  --red:#8B1A1A;--rbg:#FEF0F0;
+  --blue:#1A4A8B;--bbg:#EEF4FF;
+  --purple:#5B2A8B;--pbg:#F3EEFF;
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:110px;}
+
+/* ============ ANIMATIONS ============ */
+@keyframes floatGlow{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.55;}50%{transform:translate(-50%,-50%) scale(1.2);opacity:.85;}}
+@keyframes floatGlow2{0%,100%{transform:translate(50%,50%) scale(1);opacity:.4;}50%{transform:translate(50%,50%) scale(1.25);opacity:.7;}}
+@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+@keyframes pulseRing{0%{box-shadow:0 0 0 0 rgba(233,200,104,.45);}70%{box-shadow:0 0 0 20px rgba(233,200,104,0);}100%{box-shadow:0 0 0 0 rgba(233,200,104,0);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes spinSlow{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes bounceDown{0%,100%{transform:translateY(0);opacity:.5;}50%{transform:translateY(6px);opacity:1;}}
+@keyframes sparkle{0%,100%{opacity:.25;transform:scale(.9);}50%{opacity:.9;transform:scale(1.1);}}
+
+/* ============ BRAND HERO / INTRO ============ */
+.intro{display:block;}
+.intro.hide{display:none;}
+.bh{background:radial-gradient(ellipse 130% 100% at 50% -20%,#FFF6EA 0%,#FCEFD8 45%,#F7F2E8 100%);padding:40px 20px 30px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid #F0DFB8;}
+.bh-bg-glow{position:absolute;width:260px;height:260px;border-radius:50%;filter:blur(55px);pointer-events:none;background:radial-gradient(circle,rgba(240,121,27,.30),transparent 70%);}
+.bh-bg-glow.g1{top:20px;left:50%;animation:floatGlow 7s ease-in-out infinite;}
+.bh-bg-glow.g2{bottom:-40px;right:-20px;background:radial-gradient(circle,rgba(240,121,27,.16),transparent 70%);animation:floatGlow2 9s ease-in-out infinite;}
+.bh-spark{position:absolute;color:#F0791B;font-size:10px;pointer-events:none;animation:sparkle 3s ease-in-out infinite;opacity:.6;}
+.bh-spark:nth-child(1){top:18%;left:12%;animation-delay:.2s;}
+.bh-spark:nth-child(2){top:55%;left:85%;animation-delay:1.1s;}
+.bh-spark:nth-child(3){top:10%;right:16%;animation-delay:2s;}
+.bh-mandala{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:220px;height:220px;opacity:.07;animation:spinSlow 60s linear infinite;pointer-events:none;}
+.bh-mandala circle,.bh-mandala line{stroke:#E8721A;}
+.bh-inner{position:relative;z-index:2;}
+.logo-mark{width:168px;margin:0 auto;position:relative;animation:fadeUp .6s ease forwards;}
+.logo-mark svg{width:100%;height:auto;display:block;}
+.logo-text{margin-top:-10px;}
+.lt-main{display:block;font-family:'DM Sans',sans-serif;font-weight:700;font-size:39px;letter-spacing:.5px;color:#F0791B;line-height:1;}
+.lt-main sup{font-size:16px;top:-17px;}
+.lt-sub{display:block;text-align:right;padding-right:8px;font-weight:700;font-size:16px;letter-spacing:5px;color:#171310;margin-top:4px;}
+.bh-tag{font-size:10.5px;color:var(--gold-d);letter-spacing:3.5px;text-transform:uppercase;margin-top:10px;font-weight:600;animation:fadeUp .6s ease .1s both;}
+.bh-consultants{font-size:11px;color:var(--muted);margin-top:9px;animation:fadeUp .6s ease .15s both;}
+.bh-stats{display:flex;justify-content:center;gap:0;margin-top:20px;animation:fadeUp .6s ease .2s both;}
+.bh-stat{padding:0 14px;position:relative;}
+.bh-stat:not(:last-child)::after{content:'';position:absolute;right:0;top:3px;bottom:3px;width:1px;background:rgba(20,10,0,.1);}
+.bh-stat b{display:block;font-family:'Cormorant Garamond',serif;font-size:15px;color:#E8721A;font-weight:700;}
+.bh-stat span{display:block;font-size:8.5px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-top:2px;}
+.bh-divider2{width:56px;height:1px;background:linear-gradient(90deg,transparent,#E8721A,transparent);margin:22px auto 16px;animation:fadeUp .6s ease .25s both;}
+.bh-formtitle{font-family:'Cormorant Garamond',serif;font-size:21px;color:var(--ink);font-weight:700;animation:fadeUp .6s ease .3s both;}
+.bh-formsub{font-size:11px;color:var(--muted);margin-top:4px;animation:fadeUp .6s ease .35s both;}
+.scroll-cue{text-align:center;padding:14px 0 6px;color:#E8721A;font-size:16px;animation:bounceDown 1.8s ease-in-out infinite;}
+
+.type-grid{padding:10px 16px 34px;}
+.type-grid-title{text-align:center;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;margin-bottom:4px;position:relative;display:flex;align-items:center;justify-content:center;gap:10px;}
+.type-grid-title::before,.type-grid-title::after{content:'';width:26px;height:1px;background:var(--gold);opacity:.5;}
+.type-grid-sub{text-align:center;font-size:11.5px;color:var(--muted);margin-bottom:20px;}
+.type-cards{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.type-card{position:relative;background:linear-gradient(150deg,#FFFFFF,#FBF6E8);border:1px solid var(--border);border-radius:16px;padding:22px 10px 17px;text-align:center;cursor:pointer;transition:all .25s cubic-bezier(.2,.8,.2,1);opacity:0;animation:fadeUp .5s ease forwards;box-shadow:0 1px 3px rgba(20,10,0,.05);}
+.type-card:nth-child(1){animation-delay:.42s;}
+.type-card:nth-child(2){animation-delay:.48s;}
+.type-card:nth-child(3){animation-delay:.54s;}
+.type-card:nth-child(4){animation-delay:.60s;}
+.type-card:nth-child(5){animation-delay:.66s;}
+.type-card:nth-child(6){animation-delay:.72s;}
+.type-card:nth-child(7){animation-delay:.78s;}
+.type-card:nth-child(8){animation-delay:.84s;}
+.type-card:active{transform:scale(.96);}
+.type-card:hover{border-color:var(--gold);box-shadow:0 14px 28px -10px rgba(196,154,10,.35);transform:translateY(-4px);}
+.tc-icon-wrap{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#FFF3D0,#F6E2A8);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:21px;box-shadow:inset 0 0 0 1px rgba(196,154,10,.3);transition:transform .25s,background .25s;}
+.type-card:hover .tc-icon-wrap{transform:scale(1.1) rotate(-5deg);background:linear-gradient(135deg,var(--gold-l),var(--gold));}
+.type-card .tc-name{font-size:12.5px;font-weight:600;line-height:1.3;}
+.intro-foot{text-align:center;padding:0 30px 24px;font-size:10.5px;color:var(--muted);line-height:1.7;}
+.intro-foot b{color:var(--gold-d);}
+
+/* ============ FORM WRAP ============ */
+.formwrap{display:none;}
+.formwrap.on{display:block;}
+
+/* HEADER */
+.hdr{background:var(--ink);padding:14px 18px 12px;position:sticky;top:0;z-index:200;display:flex;align-items:center;gap:10px;}
+.hdr-icon{font-size:22px;}
+.hdr-wrap{flex:1;}
+.hdr-brand{font-family:'Cormorant Garamond',serif;color:var(--gold-l);font-size:15px;line-height:1;}
+.hdr-sub{color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
+.hdr-badge{background:rgba(255,255,255,.08);border-radius:5px;padding:3px 9px;font-size:10px;color:#CCC;}
+
+/* PROGRESS */
+.prog-wrap{background:var(--ink);padding:0 18px 14px;}
+.prog-bar{display:flex;gap:3px;}
+.pb{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.12);transition:background .3s;}
+.pb.done{background:var(--green);}
+.pb.cur{background:var(--gold);}
+.prog-info{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:#888;}
+.prog-info b{color:var(--gold-l);}
+
+/* STEPS */
+.step{display:none;}
+.step.on{display:block;}
+
+/* STEP HEADER */
+.sh{display:flex;align-items:center;gap:10px;padding:16px 18px 12px;}
+.si{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.si.gold{background:#FFF5D0;}
+.si.grn{background:var(--gbg);}
+.si.blu{background:var(--bbg);}
+.si.org{background:var(--abg);}
+.si.red{background:var(--rbg);}
+.si.pur{background:var(--pbg);}
+.si.teal{background:#E0F4F4;}
+.sh-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;line-height:1.2;}
+.sh-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin:0 14px 12px;overflow:hidden;}
+.cl{padding:9px 14px 0;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:600;}
+
+/* FIELDS */
+.f{padding:9px 14px 11px;}
+.f label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;line-height:1.4;}
+.f .req{color:var(--red);}
+.f .hint{font-size:11px;color:var(--muted);margin-bottom:5px;font-style:italic;line-height:1.4;}
+.fdiv{border:none;border-top:1px solid var(--border);margin:0 14px;}
+
+input[type=text],input[type=date],input[type=tel],input[type=email],input[type=number],select,textarea{
+  width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:#FAFAF5;
+  outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,10,.1);background:#fff;}
+textarea{resize:vertical;min-height:60px;line-height:1.5;}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%239A8A6A' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+
+/* CHIPS */
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px;}
+.chip{padding:6px 13px;border-radius:20px;font-size:12px;font-weight:500;border:1.5px solid var(--border);background:#FAFAF5;cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none;}
+.chip:hover{border-color:var(--gold);}
+.chip.og{border-color:var(--green);background:var(--gbg);color:var(--green);}
+.chip.oa{border-color:var(--amber);background:var(--abg);color:var(--amber);}
+.chip.or{border-color:var(--red);background:var(--rbg);color:var(--red);}
+.chip.ob{border-color:var(--blue);background:var(--bbg);color:var(--blue);}
+.chip.op{border-color:var(--purple);background:var(--pbg);color:var(--purple);}
+
+/* OPT ROWS */
+.opts{display:flex;flex-direction:column;gap:7px;}
+.opt{display:flex;align-items:center;gap:10px;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;transition:all .15s;background:#FAFAF5;user-select:none;}
+.opt:hover{border-color:var(--gold);background:#FFFBEF;}
+.opt input[type=radio]{width:17px;height:17px;flex-shrink:0;border:2px solid var(--border);border-radius:50%;background:#fff;appearance:none;transition:all .15s;padding:0;cursor:pointer;}
+.opt input:checked{background:var(--green);border-color:var(--green);box-shadow:inset 0 0 0 3px #fff;}
+.opt.sg{border-color:var(--green);background:var(--gbg);}
+.opt.sa{border-color:var(--amber);background:var(--abg);}
+.opt.sr{border-color:var(--red);background:var(--rbg);}
+.opt-icon{font-size:17px;}
+.opt-main{font-size:12.5px;font-weight:500;}
+.opt-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* VASTU NOTES */
+.vn{display:flex;gap:8px;align-items:flex-start;border-radius:7px;padding:8px 10px;margin-top:5px;font-size:11px;line-height:1.5;}
+.vn.g{background:var(--gbg);border:1px solid #B0D8C0;color:var(--green);}
+.vn.a{background:var(--abg);border:1px solid #F0C870;color:var(--amber);}
+.vn.r{background:var(--rbg);border:1px solid #F0C0C0;color:var(--red);}
+.vn.b{background:#FFFBEF;border:1px solid #E8D490;color:#6B5000;}
+
+/* DIRECTION GRID */
+.dir-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:280px;margin:0 auto;}
+.dir-btn{border:1.5px solid var(--border);border-radius:8px;padding:10px 4px;text-align:center;cursor:pointer;background:#FAFAF5;font-size:11px;font-weight:600;transition:all .15s;user-select:none;}
+.dir-btn:hover{border-color:var(--gold);background:#FFFBEF;}
+.dir-btn .db-icon{font-size:16px;display:block;margin-bottom:2px;}
+.dir-btn.og{border-color:var(--green);background:var(--gbg);color:var(--green);}
+.dir-btn.oa{border-color:var(--amber);background:var(--abg);color:var(--amber);}
+.dir-btn.or{border-color:var(--red);background:var(--rbg);color:var(--red);}
+.dir-btn.ob{border-color:var(--blue);background:var(--bbg);color:var(--blue);}
+.dir-btn.NA{opacity:.5;}
+
+/* SETBACK */
+.setback-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.setback-item label{font-size:11px;color:var(--muted);margin-bottom:4px;display:block;}
+
+/* MIS TAG */
+.mis{background:var(--bbg);border:1px solid #C0D0F0;border-radius:7px;padding:8px 12px;margin:0 14px 10px;font-size:10px;color:var(--blue);line-height:1.6;}
+.mis b{display:block;margin-bottom:1px;font-size:10px;}
+
+/* NAV */
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:11px 14px 18px;display:flex;gap:8px;align-items:center;z-index:100;}
+.btn{flex:1;padding:12px 14px;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
+.btn-p{background:var(--bg);color:var(--ink);border:1.5px solid var(--border);flex:0 0 auto;padding:12px 18px;}
+.btn-n{background:var(--ink);color:#fff;}
+.btn-s{background:var(--green);color:#fff;}
+.step-ct{font-size:11px;color:var(--muted);flex:0 0 auto;padding:0 2px;}
+
+/* SUCCESS */
+.success{display:none;padding:40px 18px;text-align:center;}
+.success.on{display:block;}
+.suc-icon{font-size:60px;margin-bottom:14px;}
+.suc-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;margin-bottom:6px;}
+.suc-sub{font-size:13px;color:var(--muted);line-height:1.6;}
+.ref-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin:18px 0;text-align:left;}
+.rr{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.rr:last-child{border:none;}
+.rk{color:var(--muted);}
+.rv{font-weight:600;}
+.btn-new{background:var(--ink);color:#fff;padding:13px 30px;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;margin-top:6px;}
+
+/* summary panel */
+.sum-panel{background:var(--ink);border-radius:var(--r);margin:0 14px 12px;padding:14px;}
+.sp-title{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--gold-l);margin-bottom:10px;}
+.sp-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:11px;}
+.sp-row:last-child{border:none;}
+.sk{color:#AAA;}
+.sv{font-weight:600;color:#fff;}
+.sv.g{color:#5DB87A;}
+.sv.a{color:#F0A040;}
+.sv.r{color:#E06060;}
+
+/* photo */
+.pu{border:2px dashed var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;background:#FAFAF5;}
+.pu:hover{border-color:var(--gold);background:#FFFBEF;}
+.pu input{display:none;}
+.pu-icon{font-size:26px;margin-bottom:5px;}
+.pu-text{font-size:12px;font-weight:600;}
+.pu-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.photo-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px;}
+.photo-row img{width:60px;height:60px;border-radius:6px;object-fit:cover;border:1px solid var(--border);}
+
+/* selected-type readonly display */
+.sel-type-box{display:flex;align-items:center;justify-content:space-between;background:#FFFBEF;border:1.5px solid var(--gold);border-radius:8px;padding:9px 12px;margin:9px 14px 0;}
+.sel-type-box .stx-l{font-size:12.5px;font-weight:600;}
+.sel-type-box .stx-l span{display:block;font-size:9px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.sel-type-box .stx-chg{font-size:11px;color:var(--blue);font-weight:600;cursor:pointer;}
+
+/* AI placeholder card */
+.ai-card{border-color:var(--gold);}
+.ai-ph{border:1.5px dashed var(--border);border-radius:10px;padding:26px 16px;text-align:center;background:#FCFAF3;margin:9px 14px 12px;}
+.ai-lock{font-size:26px;margin-bottom:8px;}
+.ai-ph-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;margin-bottom:6px;}
+.ai-ph-sub{font-size:11.5px;color:var(--muted);line-height:1.65;max-width:320px;margin:0 auto 14px;}
+.ai-score-preview{font-size:12.5px;font-weight:600;color:var(--muted);background:#fff;display:inline-block;padding:6px 16px;border-radius:20px;border:1px solid var(--border);}
+.ai-score-preview span{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ INTRO / BRAND / TYPE SELECT ═══════════════ -->
+<div class="intro" id="intro">
+  <div class="bh">
+    <div class="bh-bg-glow g1"></div>
+    <div class="bh-bg-glow g2"></div>
+    <div class="bh-spark">✦</div>
+    <div class="bh-spark">✦</div>
+    <div class="bh-spark">✦</div>
+    <svg class="bh-mandala" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="#E9C868" stroke-width="0.5"/>
+      <circle cx="50" cy="50" r="36" fill="none" stroke="#E9C868" stroke-width="0.5"/>
+      <circle cx="50" cy="50" r="26" fill="none" stroke="#E9C868" stroke-width="0.5"/>
+      <g stroke="#E9C868" stroke-width="0.5">
+        <line x1="50" y1="4" x2="50" y2="96"/><line x1="4" y1="50" x2="96" y2="50"/>
+        <line x1="15" y1="15" x2="85" y2="85"/><line x1="85" y1="15" x2="15" y2="85"/>
+      </g>
+    </svg>
+    <div class="bh-inner">
+      <div class="logo-mark">
+        <svg viewBox="0 0 220 175" xmlns="http://www.w3.org/2000/svg">
+          <g fill="#F0791B">
+            <path d="M0,0 C-8,-32 -6,-62 0,-86 C6,-62 8,-32 0,0 Z" transform="translate(110,145) rotate(-66) scale(0.62)"/>
+            <path d="M0,0 C-9,-36 -7,-70 0,-98 C7,-70 9,-36 0,0 Z" transform="translate(110,145) rotate(-42) scale(0.82)" fill="#ED6F13"/>
+            <path d="M0,0 C-9,-40 -7,-78 0,-108 C7,-78 9,-40 0,0 Z" transform="translate(110,145) rotate(-20) scale(0.98)"/>
+            <path d="M0,0 C-9,-42 -7,-82 0,-114 C7,-82 9,-42 0,0 Z" transform="translate(110,145) rotate(3) scale(1)" fill="#ED6F13"/>
+            <path d="M0,0 C-9,-40 -7,-78 0,-108 C7,-78 9,-40 0,0 Z" transform="translate(110,145) rotate(26) scale(0.92)"/>
+            <path d="M0,0 C-9,-36 -7,-70 0,-98 C7,-70 9,-36 0,0 Z" transform="translate(110,145) rotate(50) scale(0.78)" fill="#ED6F13"/>
+            <path d="M0,0 C-8,-32 -6,-62 0,-86 C6,-62 8,-32 0,0 Z" transform="translate(110,145) rotate(76) scale(0.6)"/>
+          </g>
+          <path d="M18,150 C58,128 88,168 128,146 C163,127 183,150 208,135" stroke="#F0791B" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <path d="M28,141 C62,122 90,150 120,133" stroke="#F5964A" stroke-width="5" fill="none" stroke-linecap="round" opacity=".85"/>
+        </svg>
+        <div class="logo-text">
+          <span class="lt-main">SAYASH<sup>®</sup></span>
+          <span class="lt-sub">VASTU</span>
+        </div>
+      </div>
+      <div class="bh-tag">Vastu Shastra Consultancy</div>
+      <div class="bh-divider2"></div>
+      <div class="bh-formtitle">Built-Up Property Vastu Audit</div>
+      <div class="bh-formsub">Comprehensive Site Inspection &amp; Assessment Report</div>
+    </div>
+  </div>
+  <div class="scroll-cue">▾</div>
+  <div class="type-grid">
+    <div class="type-grid-title">Select Property Type</div>
+    <div class="type-grid-sub">Choose the type of built-up property being inspected</div>
+    <div class="type-cards">
+      <div class="type-card" onclick="enterForm('Hospital','🏥')"><div class="tc-icon-wrap">🏥</div><div class="tc-name">Hospital</div></div>
+      <div class="type-card" onclick="enterForm('Commercial Office','🏢')"><div class="tc-icon-wrap">🏢</div><div class="tc-name">Commercial Office</div></div>
+      <div class="type-card" onclick="enterForm('Hotel','🏨')"><div class="tc-icon-wrap">🏨</div><div class="tc-name">Hotel</div></div>
+      <div class="type-card" onclick="enterForm('Mall / Retail','🛍')"><div class="tc-icon-wrap">🛍</div><div class="tc-name">Mall / Retail</div></div>
+      <div class="type-card" onclick="enterForm('Residential Complex','🏠')"><div class="tc-icon-wrap">🏠</div><div class="tc-name">Residential Complex</div></div>
+      <div class="type-card" onclick="enterForm('Industrial','🏭')"><div class="tc-icon-wrap">🏭</div><div class="tc-name">Industrial</div></div>
+      <div class="type-card" onclick="enterForm('Mixed Use','🔀')"><div class="tc-icon-wrap">🔀</div><div class="tc-name">Mixed Use</div></div>
+      <div class="type-card" onclick="enterForm('Other','📋')"><div class="tc-icon-wrap">📋</div><div class="tc-name">Other</div></div>
+    </div>
+  </div>
+  <div class="intro-foot">This report is prepared exclusively by <b>Sayash Vastu</b> certified inspectors for internal &amp; client Vastu assessment purposes.</div>
+</div>
+
+<!-- ═══════════════ FORM WRAP ═══════════════ -->
+<div class="formwrap" id="formwrap">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-icon">🕉</div>
+  <div class="hdr-wrap">
+    <div class="hdr-brand">Sayash Vastu · Built-Up Property Audit</div>
+    <div class="hdr-sub">Site Inspection Report</div>
+  </div>
+  <div class="hdr-badge" id="ref-tag">New</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-bar" id="prog-bar"></div>
+  <div class="prog-info"><b id="step-name">Step 1</b><span id="pct-txt">0% done</span></div>
+</div>
+
+<!-- ═══════ STEP 0 — CLIENT DETAILS ═══════ -->
+<div class="step on" id="st0">
+  <div class="sh"><div class="si pur">🤝</div><div><div class="sh-title">Client Details</div><div class="sh-sub">Client / company information for this audit</div></div></div>
+  <div class="mis"><b>🖥 MIS Fields</b>client_name · contact_person · designation · client_phone · client_alt_phone · client_email · client_address · client_city · client_state · lead_source · client_notes</div>
+
+  <div class="card">
+    <div class="cl">Client / Company</div>
+    <div class="f"><label>Client / Company Name <span class="req">*</span></label><input type="text" id="f-cl-name" placeholder="e.g. Max Healthcare Ltd"></div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>Contact Person <span class="req">*</span></label><input type="text" id="f-cl-contact" placeholder="Full name"></div><div><label>Designation</label><input type="text" id="f-cl-designation" placeholder="e.g. Facility Head"></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Contact Info</div>
+    <div class="f"><div class="row2"><div><label>Mobile <span class="req">*</span></label><input type="tel" id="f-cl-phone" placeholder="+91 XXXXX XXXXX"></div><div><label>Alternate Mobile</label><input type="tel" id="f-cl-altphone" placeholder="Optional"></div></div></div>
+    <hr class="fdiv">
+    <div class="f"><label>Email</label><input type="email" id="f-cl-email" placeholder="email@company.com"></div>
+    <hr class="fdiv">
+    <div class="f"><label>Registered / Correspondence Address</label><textarea id="f-cl-address" rows="2" placeholder="Office address for correspondence..."></textarea></div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>City</label><input type="text" id="f-cl-city" placeholder="City"></div><div><label>State</label><input type="text" id="f-cl-state" placeholder="State"></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Lead Source</div>
+    <div class="f">
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'lead-source','Reference','g')">🤝 Reference</div>
+        <div class="chip" onclick="chip(this,'lead-source','Website','b')">🌐 Website</div>
+        <div class="chip" onclick="chip(this,'lead-source','Google','b')">🔍 Google</div>
+        <div class="chip" onclick="chip(this,'lead-source','Walk-in','b')">🚶 Walk-in</div>
+        <div class="chip" onclick="chip(this,'lead-source','Repeat Client','g')">🔁 Repeat Client</div>
+        <div class="chip" onclick="chip(this,'lead-source','Social Media','b')">📱 Social Media</div>
+      </div>
+      <input type="hidden" id="lead-source">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Notes about client</label><textarea id="f-cl-notes" placeholder="Any relevant background on this client / engagement..."></textarea></div>
+  </div>
+</div>
+
+<!-- ═══════ STEP 1 — PROPERTY BASICS ═══════ -->
+<div class="step" id="st1">
+  <div class="sh"><div class="si gold">🏢</div><div><div class="sh-title">Property Basic Info</div><div class="sh-sub">Fill before reaching the site</div></div></div>
+  <div class="mis"><b>🖥 MIS Fields</b>inspector_name · phone · site_name · city · state · address · property_type · floors_above · floors_below · total_built_area · visit_date · vr_ref · client</div>
+
+  <div class="sel-type-box"><div class="stx-l"><span>Property Type</span><span id="sel-type-name">—</span></div><div class="stx-chg" onclick="showIntro()">Change</div></div>
+
+  <div class="card">
+    <div class="cl">Inspector</div>
+    <div class="f"><label>Inspector Name <span class="req">*</span></label><input type="text" id="f-iname" placeholder="Full name"></div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>Mobile <span class="req">*</span></label><input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX"></div><div><label>Email</label><input type="email" id="f-email" placeholder="email@domain.com"></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Property Details</div>
+    <div class="f"><label>Property / Project Name <span class="req">*</span></label><input type="text" id="f-propname" placeholder="e.g. Gurdev Hospital, Ludhiana"></div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>City <span class="req">*</span></label><input type="text" id="f-city" placeholder="City"></div><div><label>State <span class="req">*</span></label><select id="f-state"><option value="">Select</option><option>Delhi</option><option>Punjab</option><option>Haryana</option><option>UP</option><option>Bihar</option><option>Gujarat</option><option>Maharashtra</option><option>Telangana</option><option>Karnataka</option><option>Rajasthan</option><option>MP</option><option>Other</option></select></div></div></div>
+    <hr class="fdiv">
+    <div class="f"><label>Full Address / Landmark</label><textarea id="f-addr" rows="2" placeholder="Building address, road name, nearby landmark..."></textarea></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Building Size</div>
+    <div class="f">
+      <div class="row2">
+        <div><label>Floors Above Ground</label><input type="number" id="f-floors-up" placeholder="e.g. 8" min="0"></div>
+        <div><label>Basements Below</label><input type="number" id="f-floors-dn" placeholder="e.g. 2" min="0"></div>
+      </div>
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <div class="row2">
+        <div><label>Total Built-up Area</label><input type="text" id="f-bua" placeholder="e.g. 2.5 lakh sqft"></div>
+        <div><label>Plot Area</label><input type="text" id="f-plotarea" placeholder="e.g. 3.5 acres"></div>
+      </div>
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <div class="row2">
+        <div><label>Date of Visit <span class="req">*</span></label><input type="date" id="f-date"></div>
+        <div><label>VR Ref. No.</label><input type="text" id="f-vrno" placeholder="VR-XX-2026"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ STEP 2 — SITE FACING & LAND ═══════ -->
+<div class="step" id="st2">
+  <div class="sh"><div class="si gold">🧭</div><div><div class="sh-title">Site Facing & Land</div><div class="sh-sub">Same checks as open land + additional built-up checks</div></div></div>
+  <div class="mis"><b>🖥 MIS Fields</b>site_facing · corner_type · road_sides · slope · south_zone · sw_zone · t_point · flyover_zone · metro_zone</div>
+
+  <div class="card">
+    <div class="cl">Building / Plot Facing <span class="req">*</span></div>
+    <div class="f">
+      <div class="hint">Stand facing the main entry of the building. Select direction it faces.</div>
+      <div class="dir-grid">
+        <div class="dir-btn NA"></div>
+        <div class="dir-btn" onclick="dirBtn(this,'facing','North','g')"><span class="db-icon">⬆</span>North</div>
+        <div class="dir-btn NA"></div>
+        <div class="dir-btn" onclick="dirBtn(this,'facing','West','a')"><span class="db-icon">⬅</span>West</div>
+        <div class="dir-btn" style="background:#FFF5D0;border-color:var(--gold);font-size:10px;display:flex;align-items:center;justify-content:center;"><span style="font-size:20px;">🧭</span></div>
+        <div class="dir-btn" onclick="dirBtn(this,'facing','East','g')"><span class="db-icon">➡</span>East</div>
+        <div class="dir-btn" onclick="dirBtn(this,'facing','NW','a')"><span class="db-icon">↖</span>NW</div>
+        <div class="dir-btn" onclick="dirBtn(this,'facing','South','a')"><span class="db-icon">⬇</span>South</div>
+        <div class="dir-btn" onclick="dirBtn(this,'facing','SE','a')"><span class="db-icon">↘</span>SE</div>
+      </div>
+      <div class="chips" style="margin-top:10px;">
+        <div class="chip" onclick="chip(this,'facing','North-East','g')">↗ NE ⭐ Best</div>
+        <div class="chip" onclick="chip(this,'facing','South-West','r')">↙ SW ✗ Avoid</div>
+      </div>
+      <input type="hidden" id="facing">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Exact Compass Degree</label><input type="number" id="f-deg" placeholder="0–360°" min="0" max="360"></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Corner / Road Configuration</div>
+    <div class="f">
+      <label>Corner Plot Type</label>
+      <div class="opts">
+        <div class="opt" onclick="opt(this,'corner','NE Corner — Auspicious','g')"><input type="radio" name="corner"><div class="opt-icon">🌟</div><div><div class="opt-main">North-East Corner</div><div class="opt-sub">Most auspicious</div></div></div>
+        <div class="opt" onclick="opt(this,'corner','NW Corner','a')"><input type="radio" name="corner"><div class="opt-icon">🔶</div><div><div class="opt-main">North-West Corner</div><div class="opt-sub">Acceptable with planning</div></div></div>
+        <div class="opt" onclick="opt(this,'corner','SE Corner','a')"><input type="radio" name="corner"><div class="opt-icon">🔶</div><div><div class="opt-main">South-East Corner</div><div class="opt-sub">Needs careful planning</div></div></div>
+        <div class="opt" onclick="opt(this,'corner','SW Corner — Not Recommended','r')"><input type="radio" name="corner"><div class="opt-icon">🚫</div><div><div class="opt-main">South-West Corner</div><div class="opt-sub">Not recommended</div></div></div>
+        <div class="opt" onclick="opt(this,'corner','Not a corner plot','b')"><input type="radio" name="corner"><div class="opt-icon">⬜</div><div><div class="opt-main">Not a Corner Plot</div></div></div>
+      </div>
+      <input type="hidden" id="corner">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Roads touching which sides? (select all)</label>
+      <div class="chips">
+        <div class="chip" onclick="multi(this,'road-sides','North')">North</div>
+        <div class="chip" onclick="multi(this,'road-sides','East')">East</div>
+        <div class="chip" onclick="multi(this,'road-sides','South')">South</div>
+        <div class="chip" onclick="multi(this,'road-sides','West')">West</div>
+      </div>
+      <input type="hidden" id="road-sides">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Flyover / Metro nearby</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'flyover','None','g')">✅ None</div>
+        <div class="chip" onclick="chip(this,'flyover','East side — Issue','r')">Flyover East ✗</div>
+        <div class="chip" onclick="chip(this,'flyover','South side — OK','g')">Flyover South ✓</div>
+        <div class="chip" onclick="chip(this,'flyover','North Metro — OK','g')">Metro North ✓</div>
+        <div class="chip" onclick="chip(this,'flyover','Other zone','a')">Other ⚠</div>
+      </div>
+      <input type="hidden" id="flyover">
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ STEP 3 — BUILDING SHAPE & SETBACKS ═══════ -->
+<div class="step" id="st3">
+  <div class="sh"><div class="si grn">📐</div><div><div class="sh-title">Building Shape & Setbacks</div><div class="sh-sub">Shape of structure + open space in all 4 directions</div></div></div>
+  <div class="mis"><b>🖥 MIS Fields</b>building_shape · setback_north · setback_south · setback_east · setback_west · extension_ne · cut_ne · extension_sw · cut_sw · brahmasthan_clear</div>
+
+  <div class="card">
+    <div class="cl">Building Shape (Footprint)</div>
+    <div class="f">
+      <div class="vn b">🕉 The shape of the building's floor plan matters as much as the plot shape. Rectangular is ideal.</div>
+      <div class="opts" style="margin-top:10px;">
+        <div class="opt" onclick="opt(this,'bldg-shape','Rectangular / Square','g')"><input type="radio" name="bs"><div class="opt-icon">✅</div><div><div class="opt-main">Rectangular / Square</div><div class="opt-sub">Best — no Vastu issue</div></div></div>
+        <div class="opt" onclick="opt(this,'bldg-shape','L-Shape','a')"><input type="radio" name="bs"><div class="opt-icon">🔶</div><div><div class="opt-main">L-Shape</div><div class="opt-sub">Identify which corner is missing</div></div></div>
+        <div class="opt" onclick="opt(this,'bldg-shape','T-Shape','a')"><input type="radio" name="bs"><div class="opt-icon">🔶</div><div><div class="opt-main">T-Shape / H-Shape</div><div class="opt-sub">Needs assessment</div></div></div>
+        <div class="opt" onclick="opt(this,'bldg-shape','Irregular / Odd shape','r')"><input type="radio" name="bs"><div class="opt-icon">⚠</div><div><div class="opt-main">Irregular / Odd shape</div><div class="opt-sub">Unfavourable — major rectification needed</div></div></div>
+        <div class="opt" onclick="opt(this,'bldg-shape','Circular / Oval','r')"><input type="radio" name="bs"><div class="opt-icon">🚫</div><div><div class="opt-main">Circular / Oval</div><div class="opt-sub">Not recommended per Vastu</div></div></div>
+      </div>
+      <input type="hidden" id="bldg-shape">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>If L-shape or cut — which corner is the building missing?</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'bldg-cut','NE cut — Major issue','r')">NE cut ✗</div>
+        <div class="chip" onclick="chip(this,'bldg-cut','NW cut','a')">NW cut</div>
+        <div class="chip" onclick="chip(this,'bldg-cut','SE cut','a')">SE cut</div>
+        <div class="chip" onclick="chip(this,'bldg-cut','SW cut — Acceptable','g')">SW cut ✓</div>
+        <div class="chip" onclick="chip(this,'bldg-cut','No cut — full rectangle','g')">No cut ✓</div>
+      </div>
+      <input type="hidden" id="bldg-cut">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Setbacks — Open Space Around Building</div>
+    <div class="f">
+      <div class="vn b">🕉 More open space in North & East = auspicious. More built-up in South & West = good.</div>
+      <div style="margin-top:10px;" class="setback-grid">
+        <div class="setback-item"><label>⬆ North Setback</label><input type="text" id="f-sbn" placeholder="e.g. 15 ft / 5m"></div>
+        <div class="setback-item"><label>⬇ South Setback</label><input type="text" id="f-sbs" placeholder="e.g. 8 ft / 3m"></div>
+        <div class="setback-item"><label>➡ East Setback</label><input type="text" id="f-sbe" placeholder="e.g. 12 ft / 4m"></div>
+        <div class="setback-item"><label>⬅ West Setback</label><input type="text" id="f-sbw" placeholder="e.g. 8 ft / 3m"></div>
+      </div>
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Setback Balance — Overall Assessment</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'setback-bal','N & E larger — Auspicious','g')">N & E larger ✓</div>
+        <div class="chip" onclick="chip(this,'setback-bal','S & W larger — Concern','r')">S & W larger ✗</div>
+        <div class="chip" onclick="chip(this,'setback-bal','Equal all sides','a')">Equal sides</div>
+        <div class="chip" onclick="chip(this,'setback-bal','North minimal — Issue','r')">North minimal ✗</div>
+      </div>
+      <input type="hidden" id="setback-bal">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Brahmasthan (Centre of Building)</div>
+    <div class="f">
+      <div class="vn b">🕉 The centre of the building must be open/light/unobstructed. No heavy columns, toilets, lifts or staircases at the very centre.</div>
+      <div class="opts" style="margin-top:8px;">
+        <div class="opt" onclick="opt(this,'brahma','Open / Light / Courtyard','g')"><input type="radio" name="brahma"><div class="opt-icon">✅</div><div><div class="opt-main">Open / Light / Courtyard</div><div class="opt-sub">Auspicious</div></div></div>
+        <div class="opt" onclick="opt(this,'brahma','Corridor / Passage','a')"><input type="radio" name="brahma"><div class="opt-icon">🟡</div><div><div class="opt-main">Corridor / Passage</div><div class="opt-sub">Acceptable — note width</div></div></div>
+        <div class="opt" onclick="opt(this,'brahma','Staircase at centre','r')"><input type="radio" name="brahma"><div class="opt-icon">🚫</div><div><div class="opt-main">Staircase at centre</div><div class="opt-sub">Unfavourable</div></div></div>
+        <div class="opt" onclick="opt(this,'brahma','Lift at centre','r')"><input type="radio" name="brahma"><div class="opt-icon">🚫</div><div><div class="opt-main">Lift / Elevator at centre</div></div></div>
+        <div class="opt" onclick="opt(this,'brahma','Toilet / Utility at centre','r')"><input type="radio" name="brahma"><div class="opt-icon">🚫</div><div><div class="opt-main">Toilet / Utility at centre</div><div class="opt-sub">Major Vastu issue</div></div></div>
+        <div class="opt" onclick="opt(this,'brahma','Heavy column / pillar at centre','r')"><input type="radio" name="brahma"><div class="opt-icon">🚫</div><div><div class="opt-main">Heavy column / pillar at centre</div></div></div>
+      </div>
+      <input type="hidden" id="brahma">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Brahmasthan Notes</label><textarea id="f-brahma-notes" placeholder="Describe what is at the centre of the building..."></textarea></div>
+  </div>
+</div>
+
+<!-- ═══════ STEP 4 — CORES ═══════ -->
+<div class="step" id="st4">
+  <div class="sh"><div class="si blu">🪜</div><div><div class="sh-title">Cores — Stairs, Lifts & Toilets</div><div class="sh-sub">Location in the building is critical for Vastu</div></div></div>
+  <div class="mis"><b>🖥 MIS Fields</b>staircase_zone · staircase_direction · lift_zone · toilet_zones · toilet_count · service_core_location</div>
+
+  <div class="card">
+    <div class="cl">Staircase Location</div>
+    <div class="f">
+      <div class="vn b">🕉 Best zones for staircase: South, West, South-West. Avoid NE and centre.</div>
+      <label>Staircase(s) located in which zone?</label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="chip(this,'stair-zone','South zone','g')">South ✓</div>
+        <div class="chip" onclick="chip(this,'stair-zone','West zone','g')">West ✓</div>
+        <div class="chip" onclick="chip(this,'stair-zone','South-West zone','g')">SW ✓</div>
+        <div class="chip" onclick="chip(this,'stair-zone','South-East zone','a')">SE ⚠</div>
+        <div class="chip" onclick="chip(this,'stair-zone','North-West zone','a')">NW ⚠</div>
+        <div class="chip" onclick="chip(this,'stair-zone','North zone','r')">North ✗</div>
+        <div class="chip" onclick="chip(this,'stair-zone','North-East zone','r')">NE ✗</div>
+        <div class="chip" onclick="chip(this,'stair-zone','Centre / Brahmasthan','r')">Centre ✗</div>
+        <div class="chip" onclick="chip(this,'stair-zone','East zone','a')">East ⚠</div>
+      </div>
+      <input type="hidden" id="stair-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Staircase direction (which way do steps rise?)</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'stair-dir','Clockwise — Correct','g')">Clockwise ✓</div>
+        <div class="chip" onclick="chip(this,'stair-dir','Anti-clockwise — Issue','r')">Anti-clockwise ✗</div>
+        <div class="chip" onclick="chip(this,'stair-dir','Could not determine','b')">Not confirmed</div>
+      </div>
+      <input type="hidden" id="stair-dir">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Number of staircases</label><input type="number" id="f-stair-ct" placeholder="e.g. 2" min="1"></div>
+    <hr class="fdiv">
+    <div class="f"><label>Staircase Notes</label><textarea id="f-stair-notes" placeholder="Any specific observations..."></textarea></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Lift / Elevator Location</div>
+    <div class="f">
+      <div class="vn b">🕉 Lift is best in South, West or South-West. Never in NE zone or exact centre.</div>
+      <label>Lift(s) located in which zone?</label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="chip(this,'lift-zone','South zone','g')">South ✓</div>
+        <div class="chip" onclick="chip(this,'lift-zone','West zone','g')">West ✓</div>
+        <div class="chip" onclick="chip(this,'lift-zone','South-West zone','g')">SW ✓</div>
+        <div class="chip" onclick="chip(this,'lift-zone','South-East zone','a')">SE ⚠</div>
+        <div class="chip" onclick="chip(this,'lift-zone','North-West zone','a')">NW ⚠</div>
+        <div class="chip" onclick="chip(this,'lift-zone','North-East zone','r')">NE ✗</div>
+        <div class="chip" onclick="chip(this,'lift-zone','Centre','r')">Centre ✗</div>
+        <div class="chip" onclick="chip(this,'lift-zone','North zone','r')">North ✗</div>
+      </div>
+      <input type="hidden" id="lift-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Lift machine room location</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'lift-mr','On roof — South/West side','g')">Roof S/W ✓</div>
+        <div class="chip" onclick="chip(this,'lift-mr','On roof — NE side','r')">Roof NE ✗</div>
+        <div class="chip" onclick="chip(this,'lift-mr','Basement','a')">Basement ⚠</div>
+        <div class="chip" onclick="chip(this,'lift-mr','Could not check','b')">Not checked</div>
+      </div>
+      <input type="hidden" id="lift-mr">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>No. of Lifts (Passenger)</label><input type="number" id="f-lift-p" placeholder="e.g. 4" min="0"></div><div><label>Service / Goods Lifts</label><input type="number" id="f-lift-s" placeholder="e.g. 2" min="0"></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Toilets / Washrooms</div>
+    <div class="f">
+      <div class="vn b">🕉 Toilets should be in South, West or NW zone. Never in NE, never in Brahmasthan.</div>
+      <label>Primary toilet blocks located in which zones? (select all)</label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="multi(this,'toilet-zones','South')">South ✓</div>
+        <div class="chip" onclick="multi(this,'toilet-zones','West')">West ✓</div>
+        <div class="chip" onclick="multi(this,'toilet-zones','North-West')">NW ✓</div>
+        <div class="chip" onclick="multi(this,'toilet-zones','South-West')">SW ⚠</div>
+        <div class="chip" onclick="multi(this,'toilet-zones','South-East')">SE ⚠</div>
+        <div class="chip" onclick="multi(this,'toilet-zones','North')">North ✗</div>
+        <div class="chip" onclick="multi(this,'toilet-zones','North-East')">NE ✗</div>
+        <div class="chip" onclick="multi(this,'toilet-zones','Centre')">Centre ✗</div>
+      </div>
+      <input type="hidden" id="toilet-zones">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Toilet seat / WC direction (user faces which direction?)</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'toilet-dir','North — Acceptable','g')">North ✓</div>
+        <div class="chip" onclick="chip(this,'toilet-dir','South — Acceptable','g')">South ✓</div>
+        <div class="chip" onclick="chip(this,'toilet-dir','East — Avoid','r')">East ✗</div>
+        <div class="chip" onclick="chip(this,'toilet-dir','West — Avoid','r')">West ✗</div>
+        <div class="chip" onclick="chip(this,'toilet-dir','Could not check','b')">Not checked</div>
+      </div>
+      <input type="hidden" id="toilet-dir">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Any toilet in NE zone or above main entry? (Critical check)</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'toilet-ne','No — All clear','g')">No ✓</div>
+        <div class="chip" onclick="chip(this,'toilet-ne','Yes — NE zone toilet','r')">Yes NE ✗</div>
+        <div class="chip" onclick="chip(this,'toilet-ne','Yes — Above main entrance','r')">Above entry ✗</div>
+      </div>
+      <input type="hidden" id="toilet-ne">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Toilet / Washroom Observations</label><textarea id="f-toilet-notes" placeholder="Note specific issues..."></textarea></div>
+  </div>
+</div>
+
+<!-- ═══════ STEP 5 — UTILITIES ═══════ -->
+<div class="step" id="st5">
+  <div class="sh"><div class="si org">⚡</div><div><div class="sh-title">Utilities Placement</div><div class="sh-sub">DG · STP · ETP · Water Tanks · Fire Tanks · OHT</div></div></div>
+  <div class="mis"><b>🖥 MIS Fields</b>dg_zone · dg_count · stp_zone · etp_zone · ug_water_tank_zone · ug_fire_tank_zone · oht_zone · oht_direction · pump_room_zone · electrical_panel_zone · transformer_zone</div>
+
+  <div class="card">
+    <div class="cl">DG Set (Diesel Generator)</div>
+    <div class="f">
+      <div class="vn b">🕉 DG Set should be in South-East (Agni corner) or South zone. Avoid NE and North.</div>
+      <label>DG Set location zone <span class="req">*</span></label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="chip(this,'dg-zone','South-East — Best','g')">SE ✓ Best</div>
+        <div class="chip" onclick="chip(this,'dg-zone','South zone','g')">South ✓</div>
+        <div class="chip" onclick="chip(this,'dg-zone','East zone','a')">East ⚠</div>
+        <div class="chip" onclick="chip(this,'dg-zone','North-West zone','a')">NW ⚠</div>
+        <div class="chip" onclick="chip(this,'dg-zone','West zone','a')">West ⚠</div>
+        <div class="chip" onclick="chip(this,'dg-zone','North zone','r')">North ✗</div>
+        <div class="chip" onclick="chip(this,'dg-zone','North-East zone','r')">NE ✗</div>
+        <div class="chip" onclick="chip(this,'dg-zone','South-West zone','r')">SW ✗</div>
+        <div class="chip" onclick="chip(this,'dg-zone','Could not locate','b')">Not found</div>
+      </div>
+      <input type="hidden" id="dg-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>No. of DG Sets</label><input type="number" id="f-dg-ct" placeholder="e.g. 3" min="0"></div><div><label>Total DG Capacity (KVA)</label><input type="text" id="f-dg-kva" placeholder="e.g. 3×500 KVA"></div></div></div>
+    <hr class="fdiv">
+    <div class="f"><label>DG exhaust / chimney direction</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'dg-exhaust','South direction — OK','g')">South ✓</div>
+        <div class="chip" onclick="chip(this,'dg-exhaust','East direction','a')">East ⚠</div>
+        <div class="chip" onclick="chip(this,'dg-exhaust','North direction','r')">North ✗</div>
+        <div class="chip" onclick="chip(this,'dg-exhaust','Not checked','b')">Not checked</div>
+      </div>
+      <input type="hidden" id="dg-exhaust">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cl">STP — Sewage Treatment Plant</div>
+    <div class="f">
+      <div class="vn b">🕉 STP should be in South or South-West zone. Never in North-East or East.</div>
+      <label>STP location zone</label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="chip(this,'stp-zone','South-West — Good','g')">SW ✓</div>
+        <div class="chip" onclick="chip(this,'stp-zone','South zone','g')">South ✓</div>
+        <div class="chip" onclick="chip(this,'stp-zone','West zone','a')">West ⚠</div>
+        <div class="chip" onclick="chip(this,'stp-zone','South-East zone','a')">SE ⚠</div>
+        <div class="chip" onclick="chip(this,'stp-zone','North zone','r')">North ✗</div>
+        <div class="chip" onclick="chip(this,'stp-zone','North-East zone','r')">NE ✗</div>
+        <div class="chip" onclick="chip(this,'stp-zone','East zone','r')">East ✗</div>
+        <div class="chip" onclick="chip(this,'stp-zone','Basement — check zone','a')">Basement</div>
+        <div class="chip" onclick="chip(this,'stp-zone','Not present / Not found','b')">N/A</div>
+      </div>
+      <input type="hidden" id="stp-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>STP Notes (capacity, condition, proximity to NE)</label><textarea id="f-stp-notes" rows="2" placeholder="e.g. STP in basement, SW side. Capacity 100 KLD."></textarea></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">ETP — Effluent Treatment Plant</div>
+    <div class="f">
+      <div class="vn b">🕉 ETP follows same rules as STP. South or SW zone preferred.</div>
+      <label>ETP location zone</label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="chip(this,'etp-zone','South-West','g')">SW ✓</div>
+        <div class="chip" onclick="chip(this,'etp-zone','South','g')">South ✓</div>
+        <div class="chip" onclick="chip(this,'etp-zone','West','a')">West ⚠</div>
+        <div class="chip" onclick="chip(this,'etp-zone','North-East','r')">NE ✗</div>
+        <div class="chip" onclick="chip(this,'etp-zone','East','r')">East ✗</div>
+        <div class="chip" onclick="chip(this,'etp-zone','Not present','b')">N/A</div>
+      </div>
+      <input type="hidden" id="etp-zone">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Underground Water Tanks (UGT)</div>
+    <div class="f">
+      <div class="vn b">🕉 Underground water storage is best in North-East zone. Avoid South and SW zones.</div>
+      <label>Underground water tank location</label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="chip(this,'ugt-zone','North-East — Best','g')">NE ✓ Best</div>
+        <div class="chip" onclick="chip(this,'ugt-zone','North zone','g')">North ✓</div>
+        <div class="chip" onclick="chip(this,'ugt-zone','East zone','g')">East ✓</div>
+        <div class="chip" onclick="chip(this,'ugt-zone','North-West zone','a')">NW ⚠</div>
+        <div class="chip" onclick="chip(this,'ugt-zone','South zone','r')">South ✗</div>
+        <div class="chip" onclick="chip(this,'ugt-zone','South-West zone','r')">SW ✗</div>
+        <div class="chip" onclick="chip(this,'ugt-zone','Centre','r')">Centre ✗</div>
+      </div>
+      <input type="hidden" id="ugt-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>UGT Capacity (approx.)</label><input type="text" id="f-ugt-cap" placeholder="e.g. 2 lakh litres"></div><div><label>No. of UG Tanks</label><input type="number" id="f-ugt-ct" placeholder="e.g. 2" min="0"></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Underground Fire Water Tank</div>
+    <div class="f">
+      <div class="vn b">🕉 Fire water tank (underground) — same rules as water tank. NE or North preferred.</div>
+      <label>Fire water tank location zone</label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="chip(this,'fire-tank-zone','North-East','g')">NE ✓</div>
+        <div class="chip" onclick="chip(this,'fire-tank-zone','North zone','g')">North ✓</div>
+        <div class="chip" onclick="chip(this,'fire-tank-zone','East zone','g')">East ✓</div>
+        <div class="chip" onclick="chip(this,'fire-tank-zone','South zone','r')">South ✗</div>
+        <div class="chip" onclick="chip(this,'fire-tank-zone','South-West zone','r')">SW ✗</div>
+        <div class="chip" onclick="chip(this,'fire-tank-zone','Not present / Not found','b')">N/A</div>
+      </div>
+      <input type="hidden" id="fire-tank-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Fire tank capacity</label><input type="text" id="f-fire-cap" placeholder="e.g. 1.5 lakh litres / as per NBC norms"></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Overhead Water Tank (OHT)</div>
+    <div class="f">
+      <div class="vn b">🕉 OHT on roof: South-West corner is ideal. Never place OHT on North-East corner of roof.</div>
+      <label>OHT position on roof / building</label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="chip(this,'oht-zone','South-West corner of roof — Best','g')">Roof SW ✓ Best</div>
+        <div class="chip" onclick="chip(this,'oht-zone','South side of roof','g')">Roof South ✓</div>
+        <div class="chip" onclick="chip(this,'oht-zone','West side of roof','g')">Roof West ✓</div>
+        <div class="chip" onclick="chip(this,'oht-zone','North-West of roof','a')">Roof NW ⚠</div>
+        <div class="chip" onclick="chip(this,'oht-zone','North-East corner of roof','r')">Roof NE ✗</div>
+        <div class="chip" onclick="chip(this,'oht-zone','North side of roof','r')">Roof North ✗</div>
+        <div class="chip" onclick="chip(this,'oht-zone','Centre of roof','r')">Roof Centre ✗</div>
+        <div class="chip" onclick="chip(this,'oht-zone','Not present','b')">N/A</div>
+      </div>
+      <input type="hidden" id="oht-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><div class="row2"><div><label>OHT Capacity</label><input type="text" id="f-oht-cap" placeholder="e.g. 50,000 litres"></div><div><label>No. of OHTs</label><input type="number" id="f-oht-ct" placeholder="e.g. 2" min="0"></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Electrical Panels, Transformer & Pump Room</div>
+    <div class="f">
+      <label>Main electrical panel / MDB location</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'elec-zone','South-East — Best','g')">SE ✓ Best</div>
+        <div class="chip" onclick="chip(this,'elec-zone','South zone','g')">South ✓</div>
+        <div class="chip" onclick="chip(this,'elec-zone','East zone','a')">East ⚠</div>
+        <div class="chip" onclick="chip(this,'elec-zone','North-East','r')">NE ✗</div>
+        <div class="chip" onclick="chip(this,'elec-zone','North zone','r')">North ✗</div>
+        <div class="chip" onclick="chip(this,'elec-zone','Could not check','b')">N/A</div>
+      </div>
+      <input type="hidden" id="elec-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Transformer / HT panel location</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'transformer-zone','South-East','g')">SE ✓</div>
+        <div class="chip" onclick="chip(this,'transformer-zone','South','g')">South ✓</div>
+        <div class="chip" onclick="chip(this,'transformer-zone','North-East','r')">NE ✗</div>
+        <div class="chip" onclick="chip(this,'transformer-zone','North','r')">North ✗</div>
+        <div class="chip" onclick="chip(this,'transformer-zone','Not applicable','b')">N/A</div>
+      </div>
+      <input type="hidden" id="transformer-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Pump Room location</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'pump-zone','North zone — Good','g')">North ✓</div>
+        <div class="chip" onclick="chip(this,'pump-zone','North-East','g')">NE ✓</div>
+        <div class="chip" onclick="chip(this,'pump-zone','East zone','g')">East ✓</div>
+        <div class="chip" onclick="chip(this,'pump-zone','South-West','r')">SW ✗</div>
+        <div class="chip" onclick="chip(this,'pump-zone','South zone','r')">South ✗</div>
+        <div class="chip" onclick="chip(this,'pump-zone','Basement — check zone','a')">Basement</div>
+        <div class="chip" onclick="chip(this,'pump-zone','Not found','b')">N/A</div>
+      </div>
+      <input type="hidden" id="pump-zone">
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ STEP 6 — RAMP & ENTRY ═══════ -->
+<div class="step" id="st6">
+  <div class="sh"><div class="si pur">🚗</div><div><div class="sh-title">Ramp, Entry & Parking</div><div class="sh-sub">Vehicle access, ramp direction & main entry placement</div></div></div>
+  <div class="mis"><b>🖥 MIS Fields</b>main_entry_zone · main_entry_direction · ramp_location · ramp_slope_direction · basement_entry_zone · emergency_entry_zone · parking_zone</div>
+
+  <div class="card">
+    <div class="cl">Main Entry / Main Gate</div>
+    <div class="f">
+      <div class="vn b">🕉 Main entry should ideally face North or East. A North-facing main entry is very auspicious.</div>
+      <label>Main entrance faces which direction?</label>
+      <div class="chips" style="margin-top:6px;">
+        <div class="chip" onclick="chip(this,'entry-dir','North — Best','g')">North ✓ Best</div>
+        <div class="chip" onclick="chip(this,'entry-dir','North-East — Auspicious','g')">NE ✓</div>
+        <div class="chip" onclick="chip(this,'entry-dir','East','g')">East ✓</div>
+        <div class="chip" onclick="chip(this,'entry-dir','North-West','a')">NW ⚠</div>
+        <div class="chip" onclick="chip(this,'entry-dir','South-East','a')">SE ⚠</div>
+        <div class="chip" onclick="chip(this,'entry-dir','South','a')">South ⚠</div>
+        <div class="chip" onclick="chip(this,'entry-dir','West','a')">West ⚠</div>
+        <div class="chip" onclick="chip(this,'entry-dir','South-West — Avoid','r')">SW ✗</div>
+      </div>
+      <input type="hidden" id="entry-dir">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Main entry — on which part of the wall? (Pada/position)</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'entry-pos','Left side of wall facing you','a')">Left side</div>
+        <div class="chip" onclick="chip(this,'entry-pos','Centre of wall','g')">Centre ✓</div>
+        <div class="chip" onclick="chip(this,'entry-pos','Right side of wall facing you','g')">Right side ✓</div>
+        <div class="chip" onclick="chip(this,'entry-pos','Could not determine','b')">Not determined</div>
+      </div>
+      <input type="hidden" id="entry-pos">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Emergency / Casualty Entry direction (if applicable)</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'emrg-dir','North','g')">North ✓</div>
+        <div class="chip" onclick="chip(this,'emrg-dir','East','g')">East ✓</div>
+        <div class="chip" onclick="chip(this,'emrg-dir','South','a')">South ⚠</div>
+        <div class="chip" onclick="chip(this,'emrg-dir','West','a')">West ⚠</div>
+        <div class="chip" onclick="chip(this,'emrg-dir','Not applicable','b')">N/A</div>
+      </div>
+      <input type="hidden" id="emrg-dir">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Vehicle Ramp</div>
+    <div class="f">
+      <div class="vn b">🕉 Ramp going down should slope towards North or East. A ramp in the NE zone of the plot is unfavourable.</div>
+      <label>Ramp present?</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'ramp-present','Yes — basement ramp','b')">Yes — Basement</div>
+        <div class="chip" onclick="chip(this,'ramp-present','Yes — podium/elevated ramp','b')">Yes — Elevated</div>
+        <div class="chip" onclick="chip(this,'ramp-present','No ramp','b')">No ramp</div>
+      </div>
+      <input type="hidden" id="ramp-present">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Ramp location on the plot</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'ramp-zone','North side','g')">North ✓</div>
+        <div class="chip" onclick="chip(this,'ramp-zone','East side','g')">East ✓</div>
+        <div class="chip" onclick="chip(this,'ramp-zone','North-East zone','r')">NE ✗</div>
+        <div class="chip" onclick="chip(this,'ramp-zone','South side','a')">South ⚠</div>
+        <div class="chip" onclick="chip(this,'ramp-zone','West side','a')">West ⚠</div>
+        <div class="chip" onclick="chip(this,'ramp-zone','South-West zone','r')">SW ✗</div>
+        <div class="chip" onclick="chip(this,'ramp-zone','Not applicable','b')">N/A</div>
+      </div>
+      <input type="hidden" id="ramp-zone">
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <label>Ramp slopes (descends) towards which direction?</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'ramp-slope','North — Auspicious','g')">North ✓</div>
+        <div class="chip" onclick="chip(this,'ramp-slope','East — Auspicious','g')">East ✓</div>
+        <div class="chip" onclick="chip(this,'ramp-slope','South','a')">South ⚠</div>
+        <div class="chip" onclick="chip(this,'ramp-slope','West','a')">West ⚠</div>
+        <div class="chip" onclick="chip(this,'ramp-slope','South-West','r')">SW ✗</div>
+        <div class="chip" onclick="chip(this,'ramp-slope','Not applicable','b')">N/A</div>
+      </div>
+      <input type="hidden" id="ramp-slope">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Ramp Notes</label><textarea id="f-ramp-notes" rows="2" placeholder="Width, gradient, any issues observed..."></textarea></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Parking Zone</div>
+    <div class="f">
+      <div class="vn b">🕉 Open surface parking is best in East or North zones. Parking in NE zone means that area loses its lightness.</div>
+      <label>Main parking zone(s) — select all that apply</label>
+      <div class="chips">
+        <div class="chip" onclick="multi(this,'parking-zones','North zone')">North ✓</div>
+        <div class="chip" onclick="multi(this,'parking-zones','East zone')">East ✓</div>
+        <div class="chip" onclick="multi(this,'parking-zones','Basement')">Basement</div>
+        <div class="chip" onclick="multi(this,'parking-zones','Multi-level')">Multi-level</div>
+        <div class="chip" onclick="multi(this,'parking-zones','South zone')">South ⚠</div>
+        <div class="chip" onclick="multi(this,'parking-zones','West zone')">West ⚠</div>
+        <div class="chip" onclick="multi(this,'parking-zones','NE zone')">NE ✗</div>
+      </div>
+      <input type="hidden" id="parking-zones">
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ STEP 7 — SURROUNDINGS ═══════ -->
+<div class="step" id="st7">
+  <div class="sh"><div class="si red">🏙️</div><div><div class="sh-title">Site Surroundings</div><div class="sh-sub">External factors affecting the built property</div></div></div>
+  <div class="mis"><b>🖥 MIS Fields</b>drainage_zone · water_body · flyover_zone · pole_front · ht_wire · temple_shadow · cemetery · neighbour_heights · road_sides</div>
+
+  <div class="card">
+    <div class="cl">Drainage & Water</div>
+    <div class="f"><label>Large drainage / nala — which zone?</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'drain2','None','g')">✅ None</div>
+        <div class="chip" onclick="chip(this,'drain2','North or East — good','g')">N/E ✓</div>
+        <div class="chip" onclick="chip(this,'drain2','South-West — Issue','r')">SW ✗</div>
+        <div class="chip" onclick="chip(this,'drain2','South zone','a')">South ⚠</div>
+        <div class="chip" onclick="chip(this,'drain2','West zone','a')">West ⚠</div>
+      </div>
+      <input type="hidden" id="drain2">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Water body near site (river/pond/lake)</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'water2','None','g')">None</div>
+        <div class="chip" onclick="chip(this,'water2','North/East — auspicious','g')">N/E ✓</div>
+        <div class="chip" onclick="chip(this,'water2','South/West — issue','r')">S/W ✗</div>
+      </div>
+      <input type="hidden" id="water2">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Poles, Wires & Structures</div>
+    <div class="f"><label>Electric pole directly opposite main entry?</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'pole2','Clear — no pole','g')">✅ Clear</div>
+        <div class="chip" onclick="chip(this,'pole2','Pole directly in front','r')">Pole in front ✗</div>
+        <div class="chip" onclick="chip(this,'pole2','Nearby but offset','a')">Nearby ⚠</div>
+      </div>
+      <input type="hidden" id="pole2">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>HT wire / high-tension line above or near building?</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'ht2','None','g')">✅ None</div>
+        <div class="chip" onclick="chip(this,'ht2','Above building','r')">Above ✗</div>
+        <div class="chip" onclick="chip(this,'ht2','Nearby — North side','a')">Nearby N</div>
+        <div class="chip" onclick="chip(this,'ht2','Nearby — South side','a')">Nearby S</div>
+      </div>
+      <input type="hidden" id="ht2">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Temple / religious structure — shadow on building?</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'temple2','None nearby','g')">✅ None</div>
+        <div class="chip" onclick="chip(this,'temple2','Present — no shadow','a')">No shadow ⚠</div>
+        <div class="chip" onclick="chip(this,'temple2','Shadow falls on building','r')">Shadow ✗</div>
+      </div>
+      <input type="hidden" id="temple2">
+    </div>
+    <hr class="fdiv">
+    <div class="f"><label>Cemetery / cremation ground</label>
+      <div class="chips">
+        <div class="chip" onclick="chip(this,'cem2','None within 300m','g')">✅ None</div>
+        <div class="chip" onclick="chip(this,'cem2','100–300m away','r')">100–300m ⚠</div>
+        <div class="chip" onclick="chip(this,'cem2','Within 100m','r')">Under 100m ✗</div>
+      </div>
+      <input type="hidden" id="cem2">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Neighbour Buildings</div>
+    <div class="f">
+      <div class="row2">
+        <div><label>North neighbour height</label>
+          <select id="f-nh-n"><option value="">Select</option><option>Open / Low ✓</option><option>Similar height</option><option>Taller — issue ✗</option></select>
+        </div>
+        <div><label>East neighbour height</label>
+          <select id="f-nh-e"><option value="">Select</option><option>Open / Low ✓</option><option>Similar height</option><option>Taller — issue ✗</option></select>
+        </div>
+      </div>
+    </div>
+    <hr class="fdiv">
+    <div class="f">
+      <div class="row2">
+        <div><label>South neighbour height</label>
+          <select id="f-nh-s"><option value="">Select</option><option>Open / Low</option><option>Similar</option><option>Heavy / Tall ✓</option></select>
+        </div>
+        <div><label>SW neighbour height</label>
+          <select id="f-nh-sw"><option value="">Select</option><option>Open / Low ✗</option><option>Similar</option><option>Heavy / Tall ✓</option></select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ STEP 8 — PHOTOS & VERDICT ═══════ -->
+<div class="step" id="st8">
+  <div class="sh"><div class="si teal">📸</div><div><div class="sh-title">Photos & Final Assessment</div><div class="sh-sub">Upload site photos and give overall recommendation</div></div></div>
+  <div class="mis"><b>🖥 MIS Fields</b>photos[] · key_positives · key_negatives · critical_issues · overall_remarks · final_recommendation · vastu_score_estimate · submitted_at</div>
+
+  <div class="card">
+    <div class="cl">Site Photos</div>
+    <div class="f">
+      <div class="hint">Upload: Main entry, all 4 sides, DG, staircases, lift, OHT, ramp, any issues. Label clearly.</div>
+      <div class="pu" onclick="document.getElementById('photo-inp').click()">
+        <input type="file" id="photo-inp" multiple accept="image/*" onchange="handlePhotos(this)">
+        <div class="pu-icon">📷</div>
+        <div class="pu-text">Tap to Upload Site Photos</div>
+        <div class="pu-sub">Multiple photos · JPG / PNG</div>
+      </div>
+      <div class="photo-row" id="photo-prev"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Key Findings</div>
+    <div class="f"><label>Key Positives</label><textarea id="f-pos" placeholder="e.g. NE facing, rectangular building, DG in SE, UGT in NE, OHT on SW corner of roof..."></textarea></div>
+    <hr class="fdiv">
+    <div class="f"><label>Key Issues / Negatives</label><textarea id="f-neg" placeholder="e.g. Staircase in NE zone, toilet above main entry, OHT on NE roof, STP in East zone..."></textarea></div>
+    <hr class="fdiv">
+    <div class="f"><label>Critical Issues Requiring Immediate Attention</label><textarea id="f-crit" placeholder="List any showstopper issues..."></textarea></div>
+    <hr class="fdiv">
+    <div class="f"><label>Overall Remarks & Recommended Rectifications</label><textarea id="f-rem" rows="4" placeholder="Complete assessment — what was observed, what needs to be corrected, phasing of corrections..."></textarea></div>
+  </div>
+
+  <div class="card">
+    <div class="cl">Final Recommendation <span class="req">*</span></div>
+    <div class="f">
+      <div class="opts">
+        <div class="opt" onclick="opt(this,'verdict','Suitable — Minor Rectifications Only','g')"><input type="radio" name="v"><div class="opt-icon">✅</div><div><div class="opt-main">Suitable — Minor Rectifications Only</div><div class="opt-sub">Property can be used with small corrections</div></div></div>
+        <div class="opt" onclick="opt(this,'verdict','Conditional — Significant Rectification Needed','a')"><input type="radio" name="v"><div class="opt-icon">⚠️</div><div><div class="opt-main">Conditional — Significant Rectification Needed</div><div class="opt-sub">Can proceed after corrections are implemented</div></div></div>
+        <div class="opt" onclick="opt(this,'verdict','Major Issues — Detailed Consultant Visit Needed','a')"><input type="radio" name="v"><div class="opt-icon">🔶</div><div><div class="opt-main">Major Issues — Detailed Consultant Visit Needed</div><div class="opt-sub">Field report not sufficient; Satish/Yash ji to visit</div></div></div>
+        <div class="opt" onclick="opt(this,'verdict','Not Recommended — Fundamental Vastu Issues','r')"><input type="radio" name="v"><div class="opt-icon">🚫</div><div><div class="opt-main">Not Recommended — Fundamental Vastu Issues</div><div class="opt-sub">Core structural issues cannot be corrected</div></div></div>
+      </div>
+      <input type="hidden" id="verdict">
+    </div>
+  </div>
+
+  <div class="card ai-card">
+    <div class="cl">🤖 AI Vastu Analysis & Rating</div>
+    <div class="ai-ph">
+      <div class="ai-lock">🔒</div>
+      <div class="ai-ph-title">AI Analysis Coming Soon</div>
+      <div class="ai-ph-sub">Once connected to the backend, this section will auto-generate a detailed Vastu analysis and score based on all inputs captured above.</div>
+      <div class="ai-score-preview">Vastu Score: <span>-- / 100</span></div>
+    </div>
+  </div>
+
+  <!-- LIVE SUMMARY -->
+  <div class="sum-panel">
+    <div class="sp-title">🕉 Submission Preview</div>
+    <div id="sum-rows"></div>
+  </div>
+
+</div><!-- /step 8 -->
+
+<!-- SUCCESS -->
+<div class="success" id="success">
+  <div class="suc-icon">✅</div>
+  <div class="suc-title">Report Submitted!</div>
+  <div class="suc-sub">Built-up property audit recorded.<br>MIS team will receive this data.</div>
+  <div class="ref-box" id="suc-detail"></div>
+  <button class="btn-new" onclick="location.reload()">+ New Audit</button>
+</div>
+
+<!-- NAV BAR -->
+<div class="nav" id="nav">
+  <button class="btn btn-p" id="btn-p" onclick="go(-1)">← Back</button>
+  <div class="step-ct" id="step-ct">1/9</div>
+  <button class="btn btn-n" id="btn-n" onclick="go(1)">Next →</button>
+</div>
+
+</div><!-- /formwrap -->
+
+<script>
+const STEPS=9;
+const SNAMES=['Client Details','Property Info','Site Facing','Shape & Setbacks','Cores','Utilities','Ramp & Entry','Surroundings','Photos & Verdict'];
+let cur=0;
+const FD={};
+const MS={};
+
+(function(){
+  const pb=document.getElementById('prog-bar');
+  for(let i=0;i<STEPS;i++){
+    const d=document.createElement('div');
+    d.className='pb';d.id='pb'+i;
+    pb.appendChild(d);
+  }
+})();
+
+function enterForm(type,icon){
+  FD['prop-type']=type;
+  document.getElementById('intro').classList.add('hide');
+  document.getElementById('formwrap').classList.add('on');
+  document.getElementById('sel-type-name').textContent=(icon?icon+' ':'')+type;
+  cur=0;
+  document.getElementById('st0').classList.add('on');
+  updUI();
+  window.scrollTo(0,0);
+}
+
+function showIntro(){
+  document.getElementById('formwrap').classList.remove('on');
+  document.getElementById('intro').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+
+function updUI(){
+  for(let i=0;i<STEPS;i++){
+    const e=document.getElementById('pb'+i);
+    e.className='pb'+(i<cur?' done':i===cur?' cur':'');
+  }
+  document.getElementById('step-name').textContent=SNAMES[cur];
+  document.getElementById('pct-txt').textContent=Math.round((cur/STEPS)*100)+'% done';
+  document.getElementById('step-ct').textContent=(cur+1)+'/'+STEPS;
+  const bn=document.getElementById('btn-n');
+  bn.textContent=cur===STEPS-1?'Submit Report ✓':'Next →';
+  bn.className='btn '+(cur===STEPS-1?'btn-s':'btn-n');
+  const vr=document.getElementById('f-vrno');
+  const ci=document.getElementById('f-city');
+  document.getElementById('ref-tag').textContent=vr&&vr.value?vr.value:ci&&ci.value?ci.value:'New';
+  if(cur===STEPS-1)buildSum();
+}
+
+function go(d){
+  if(d===1&&cur===STEPS-1){submit();return;}
+  if(d===-1&&cur===0){showIntro();return;}
+  document.getElementById('st'+cur).classList.remove('on');
+  cur=Math.max(0,Math.min(STEPS-1,cur+d));
+  document.getElementById('st'+cur).classList.add('on');
+  updUI();window.scrollTo(0,0);
+}
+
+function chip(el,key,val,cls){
+  const g=el.closest('.chips');
+  g.querySelectorAll('.chip').forEach(c=>c.className='chip');
+  el.classList.add('o'+cls);
+  document.getElementById(key)&&(document.getElementById(key).value=val);
+  FD[key]=val;
+}
+
+function opt(el,key,val,cls){
+  const g=el.closest('.opts');
+  g.querySelectorAll('.opt').forEach(o=>{o.className='opt';});
+  el.classList.add('s'+(cls||'g'));
+  el.querySelector('input').checked=true;
+  document.getElementById(key)&&(document.getElementById(key).value=val);
+  FD[key]=val;
+}
+
+function dirBtn(el,key,val,cls){
+  const g=el.closest('.dir-grid');
+  g.querySelectorAll('.dir-btn').forEach(b=>b.className=b.className.replace(/ o[garb]/,''));
+  el.classList.add('o'+cls);
+  document.getElementById(key)&&(document.getElementById(key).value=val);
+  FD[key]=val;
+}
+
+function multi(el,key,val){
+  if(!MS[key])MS[key]=[];
+  const idx=MS[key].indexOf(val);
+  if(idx>=0){MS[key].splice(idx,1);el.className='chip';}
+  else{MS[key].push(val);el.classList.add('ob');}
+  document.getElementById(key)&&(document.getElementById(key).value=MS[key].join(', '));
+  FD[key]=MS[key].join(', ');
+}
+
+function handlePhotos(inp){
+  const pr=document.getElementById('photo-prev');
+  Array.from(inp.files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{const img=document.createElement('img');img.src=e.target.result;pr.appendChild(img);};
+    r.readAsDataURL(f);
+  });
+}
+
+function tv(id){return(document.getElementById(id)||{}).value||'';}
+
+function buildSum(){
+  const rows=[
+    ['Client',tv('f-cl-name')],
+    ['Inspector',tv('f-iname')],
+    ['Property',tv('f-propname')],
+    ['City',tv('f-city')],
+    ['Property Type',FD['prop-type']||'—'],
+    ['Visit Date',tv('f-date')],
+    ['Facing',FD['facing']||'—'],
+    ['Building Shape',FD['bldg-shape']||'—'],
+    ['Staircase Zone',FD['stair-zone']||'—'],
+    ['Lift Zone',FD['lift-zone']||'—'],
+    ['DG Zone',FD['dg-zone']||'—'],
+    ['UGT Zone',FD['ugt-zone']||'—'],
+    ['OHT Zone',FD['oht-zone']||'—'],
+    ['Ramp Zone',FD['ramp-zone']||'—'],
+    ['Verdict',FD['verdict']||'—'],
+  ];
+  const c=document.getElementById('sum-rows');
+  c.innerHTML=rows.map(([k,v])=>{
+    let cl='';
+    if(!v||v==='—')cl='';
+    else if(v.includes('✓')||v.includes('Best')||v.includes('Suitable'))cl='g';
+    else if(v.includes('✗')||v.includes('Not Recommended')||v.includes('Issue')||v.includes('NE'))cl='r';
+    else if(v.includes('⚠')||v.includes('Conditional'))cl='a';
+    return`<div class="sp-row"><span class="sk">${k}</span><span class="sv ${cl}">${v||'—'}</span></div>`;
+  }).join('');
+}
+
+function genId(){return'SVA-'+Math.random().toString(36).substr(2,6).toUpperCase()+'-'+new Date().getFullYear();}
+
+function submit(){
+  const id=genId();
+  const payload={
+    submission_id:id,
+    form_type:'built_up_property',
+    submitted_at:new Date().toISOString(),
+    client:{name:tv('f-cl-name'),contact_person:tv('f-cl-contact'),designation:tv('f-cl-designation'),phone:tv('f-cl-phone'),alt_phone:tv('f-cl-altphone'),email:tv('f-cl-email'),address:tv('f-cl-address'),city:tv('f-cl-city'),state:tv('f-cl-state'),lead_source:FD['lead-source'],notes:tv('f-cl-notes')},
+    inspector:{name:tv('f-iname'),phone:tv('f-phone'),email:tv('f-email')},
+    property:{name:tv('f-propname'),city:tv('f-city'),state:tv('f-state'),address:tv('f-addr'),type:FD['prop-type'],floors_above:tv('f-floors-up'),floors_below:tv('f-floors-dn'),bua:tv('f-bua'),plot_area:tv('f-plotarea'),visit_date:tv('f-date'),vr_ref:tv('f-vrno')},
+    facing:{direction:FD['facing'],degree:tv('f-deg'),corner:FD['corner'],road_sides:FD['road-sides'],flyover:FD['flyover']},
+    building:{shape:FD['bldg-shape'],cut:FD['bldg-cut'],setback_n:tv('f-sbn'),setback_s:tv('f-sbs'),setback_e:tv('f-sbe'),setback_w:tv('f-sbw'),setback_balance:FD['setback-bal'],brahmasthan:FD['brahma'],brahmasthan_notes:tv('f-brahma-notes')},
+    cores:{staircase_zone:FD['stair-zone'],staircase_direction:FD['stair-dir'],staircase_count:tv('f-stair-ct'),staircase_notes:tv('f-stair-notes'),lift_zone:FD['lift-zone'],lift_machine_room:FD['lift-mr'],lifts_passenger:tv('f-lift-p'),lifts_service:tv('f-lift-s'),toilet_zones:FD['toilet-zones'],toilet_direction:FD['toilet-dir'],toilet_ne_check:FD['toilet-ne'],toilet_notes:tv('f-toilet-notes')},
+    utilities:{dg_zone:FD['dg-zone'],dg_count:tv('f-dg-ct'),dg_kva:tv('f-dg-kva'),dg_exhaust:FD['dg-exhaust'],stp_zone:FD['stp-zone'],stp_notes:tv('f-stp-notes'),etp_zone:FD['etp-zone'],ugt_zone:FD['ugt-zone'],ugt_capacity:tv('f-ugt-cap'),ugt_count:tv('f-ugt-ct'),fire_tank_zone:FD['fire-tank-zone'],fire_tank_capacity:tv('f-fire-cap'),oht_zone:FD['oht-zone'],oht_capacity:tv('f-oht-cap'),oht_count:tv('f-oht-ct'),electrical_zone:FD['elec-zone'],transformer_zone:FD['transformer-zone'],pump_room_zone:FD['pump-zone']},
+    access:{entry_direction:FD['entry-dir'],entry_position:FD['entry-pos'],emergency_entry:FD['emrg-dir'],ramp_present:FD['ramp-present'],ramp_zone:FD['ramp-zone'],ramp_slope:FD['ramp-slope'],ramp_notes:tv('f-ramp-notes'),parking_zones:FD['parking-zones']},
+    surroundings:{drainage:FD['drain2'],water_body:FD['water2'],pole:FD['pole2'],ht_wire:FD['ht2'],temple:FD['temple2'],cemetery:FD['cem2'],neighbour_n:tv('f-nh-n'),neighbour_e:tv('f-nh-e'),neighbour_s:tv('f-nh-s'),neighbour_sw:tv('f-nh-sw')},
+    assessment:{positives:tv('f-pos'),negatives:tv('f-neg'),critical:tv('f-crit'),remarks:tv('f-rem'),verdict:FD['verdict']},
+    ai_analysis:{status:'pending_backend_integration',score:null}
+  };
+  console.log('MIS PAYLOAD →',JSON.stringify(payload,null,2));
+
+  document.querySelectorAll('.step').forEach(s=>s.style.display='none');
+  document.getElementById('nav').style.display='none';
+  const ss=document.getElementById('success');
+  ss.classList.add('on');
+  const vc=FD['verdict']||'';
+  const vc_col=vc.includes('Suitable')?'#1E6B40':vc.includes('Not Rec')?'#8B1A1A':'#A05000';
+  document.getElementById('suc-detail').innerHTML=`
+    <div class="rr"><span class="rk">Submission ID</span><span class="rv">${id}</span></div>
+    <div class="rr"><span class="rk">Client</span><span class="rv">${tv('f-cl-name')||'—'}</span></div>
+    <div class="rr"><span class="rk">Inspector</span><span class="rv">${tv('f-iname')||'—'}</span></div>
+    <div class="rr"><span class="rk">Property</span><span class="rv">${tv('f-propname')||'—'}, ${tv('f-city')||'—'}</span></div>
+    <div class="rr"><span class="rk">Date</span><span class="rv">${tv('f-date')||'—'}</span></div>
+    <div class="rr"><span class="rk">Verdict</span><span class="rv" style="color:${vc_col}">${vc||'—'}</span></div>
+    <div class="rr"><span class="rk">Submitted</span><span class="rv">${new Date().toLocaleString('en-IN')}</span></div>
+  `;
+  window.scrollTo(0,0);
+}
+
+document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
