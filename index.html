@@ -754,6 +754,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <div class="chip" onclick="chip(this,'stp-zone','South zone','g')">South ✓</div>
         <div class="chip" onclick="chip(this,'stp-zone','West zone','a')">West ⚠</div>
         <div class="chip" onclick="chip(this,'stp-zone','South-East zone','a')">SE ⚠</div>
+        <div class="chip" onclick="chip(this,'stp-zone','North-West zone','a')">NW ⚠</div>
         <div class="chip" onclick="chip(this,'stp-zone','North zone','r')">North ✗</div>
         <div class="chip" onclick="chip(this,'stp-zone','North-East zone','r')">NE ✗</div>
         <div class="chip" onclick="chip(this,'stp-zone','East zone','r')">East ✗</div>
@@ -775,6 +776,8 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <div class="chip" onclick="chip(this,'etp-zone','South-West','g')">SW ✓</div>
         <div class="chip" onclick="chip(this,'etp-zone','South','g')">South ✓</div>
         <div class="chip" onclick="chip(this,'etp-zone','West','a')">West ⚠</div>
+        <div class="chip" onclick="chip(this,'etp-zone','North-West','a')">NW ⚠</div>
+        <div class="chip" onclick="chip(this,'etp-zone','South-East','a')">SE ⚠</div>
         <div class="chip" onclick="chip(this,'etp-zone','North-East','r')">NE ✗</div>
         <div class="chip" onclick="chip(this,'etp-zone','East','r')">East ✗</div>
         <div class="chip" onclick="chip(this,'etp-zone','Not present','b')">N/A</div>
@@ -793,6 +796,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
         <div class="chip" onclick="chip(this,'ugt-zone','North zone','g')">North ✓</div>
         <div class="chip" onclick="chip(this,'ugt-zone','East zone','g')">East ✓</div>
         <div class="chip" onclick="chip(this,'ugt-zone','North-West zone','a')">NW ⚠</div>
+        <div class="chip" onclick="chip(this,'ugt-zone','South-East zone','r')">SE ✗</div>
         <div class="chip" onclick="chip(this,'ugt-zone','South zone','r')">South ✗</div>
         <div class="chip" onclick="chip(this,'ugt-zone','South-West zone','r')">SW ✗</div>
         <div class="chip" onclick="chip(this,'ugt-zone','Centre','r')">Centre ✗</div>
@@ -1445,16 +1449,7 @@ function submit(){
   document.getElementById('nav').style.display='none';
   const ss=document.getElementById('success');
   ss.classList.add('on');
-  const vc=FD['verdict']||'';
-  const vc_col=vc.includes('Suitable')?'#1E6B40':vc.includes('Not Rec')?'#8B1A1A':'#A05000';
-  document.getElementById('suc-detail').innerHTML=`
-    <div class="rr"><span class="rk">Submission ID</span><span class="rv">${id}</span></div>
-    <div class="rr"><span class="rk">Client</span><span class="rv">${tv('f-cl-name')||'—'}</span></div>
-    <div class="rr"><span class="rk">Inspector</span><span class="rv">${tv('f-iname')||'—'}</span></div>
-    <div class="rr"><span class="rk">Property</span><span class="rv">${tv('f-propname')||'—'}, ${tv('f-city')||'—'}</span></div>
-    <div class="rr"><span class="rk">Date</span><span class="rv">${tv('f-date')||'—'}</span></div>
-    <div class="rr"><span class="rk">Verdict</span><span class="rv" style="color:${vc_col}">${vc||'—'}</span></div>
-    <div class="rr"><span class="rk">Submitted</span><span class="rv">${new Date().toLocaleString('en-IN')}</span></div>
+document.getElementById('report-doc').innerHTML = buildReportHTML(id);
   `;
   window.scrollTo(0,0);
 }
