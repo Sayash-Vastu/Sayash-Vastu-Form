@@ -273,8 +273,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .btn-print{flex:1;background:var(--ink);color:#fff;padding:12px;border:none;border-radius:9px;font-weight:600;font-size:13px;cursor:pointer;}
 @media print{
   .nav,.report-actions,.btn-new,.suc-icon,.suc-title,.suc-sub{display:none!important;}
-  body{padding-bottom:0!important;background:#fff!important;}
-  .report-doc{margin:0;border:none;}
+  .hdr,.prog-wrap,.intro,.step{display:none!important;}
+  .formwrap{padding:0!important;max-width:100%!important;}
+  body{background:#fff!important;}
+  .report-doc{box-shadow:none!important;border:none!important;margin:0!important;}
+  @page{margin:12mm;}
 }
 </style>
 </head>
