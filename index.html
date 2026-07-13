@@ -1154,7 +1154,10 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   <div class="suc-icon">✅</div>
   <div class="suc-title">Report Generated!</div>
   <div class="suc-sub">Review, print, or save this audit report below.</div>
-  <div class="report-actions"><button class="btn-print" onclick="window.print()">🖨 Print / Save as PDF</button></div>
+  <div class="report-actions" style="flex-direction:column">
+    <button class="btn-print" onclick="window.print()">📄 Save as PDF</button>
+    <div style="font-size:10.5px;color:var(--muted);text-align:center;margin-top:6px">Destination mein "Save as PDF" select karo · Headers and footers UNCHECK karo</div>
+  </div>
   <div id="report-doc"></div>
   <button class="btn-new" onclick="location.reload()">+ New Audit</button>
 </div>
@@ -1163,8 +1166,6 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   <button class="btn btn-p" id="btn-p" onclick="go(-1)">← Back</button>
   <div class="step-ct" id="step-ct">1/9</div>
   <button class="btn btn-n" id="btn-n" onclick="go(1)">Next →</button>
-</div>
-
 </div>
 
 <script>
