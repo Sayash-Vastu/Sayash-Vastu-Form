@@ -1417,6 +1417,21 @@ function buildReportHTML(id){
     h+='</div>';
   }
   h+='<div class="report-verdict-band '+vcCl+'">Final Recommendation: '+vc+'</div>';
+  // ── Feedback & Suggestion: project lena chahiye ya nahi ──
+  let takeCl='a', takeIcon='🔶', takeTxt='Detailed review recommended before commitment — senior consultant visit advised.';
+  if(vc.includes('Not Rec')){
+    takeCl='r'; takeIcon='🚫'; takeTxt='NOT RECOMMENDED to take this project — fundamental Vastu defects cannot be rectified. Advise client accordingly.';
+  } else if(vc.includes('Major Issues')){
+    takeCl='a'; takeIcon='🔶'; takeTxt='HOLD — do not commit yet. Detailed visit by Satish ji / Yash ji required before final decision.';
+  } else if(vc.includes('Conditional')){
+    takeCl='a'; takeIcon='⚠️'; takeTxt='CAN BE TAKEN with conditions — significant rectifications must be agreed with client before proceeding. Scope and cost of corrections should be discussed upfront.';
+  } else if(vc.includes('Suitable')){
+    takeCl='g'; takeIcon='✅'; takeTxt='RECOMMENDED to take this project — property has strong Vastu compliance, only minor rectifications needed.';
+  }
+  const scoreNote = r.answered ? ' SVR™ Score: '+r.score+'/100.' : '';
+  h+='<div class="report-section"><div class="report-section-title">Feedback & Suggestion</div>';
+  h+='<div class="report-text-block" style="border-left:3px solid var(--'+(takeCl==='g'?'green':takeCl==='r'?'red':'amber')+');padding-left:12px"><b>'+takeIcon+' Project Decision: </b>'+takeTxt+scoreNote+'</div>';
+  h+='</div>';
   h+='<div class="report-footer">This report has been prepared by Sayash Vastu certified inspector <b>'+(tv('f-iname')||'—')+'</b> for internal &amp; client Vastu assessment purposes.<br>Sayash Vastu · Big Jo\'s Tower, Netaji Subhash Place, Delhi</div>';
   h+='</div>';
   return h;
