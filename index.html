@@ -1168,7 +1168,11 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   <button class="btn btn-n" id="btn-n" onclick="go(1)">Next →</button>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SB_URL = 'https://rgoujuvdqqddqeqnryfg.supabase.co';
+const SB_KEY = 'sb_publishable_Qi90wjrEak0zpymXEecNbQ_C30agpsx';
+const sbA = supabase.createClient(SB_URL, SB_KEY);
 const STEPS=9;
 const SNAMES=['Client Details','Property Info','Site Facing','Shape & Setbacks','Cores','Utilities','Ramp & Entry','Surroundings','Photos & Verdict'];
 let cur=0;
@@ -1463,6 +1467,36 @@ function submit(){
     ai_analysis:{status:'pending_backend_integration',score:null}
   };
   console.log('MIS PAYLOAD →',JSON.stringify(payload,null,2));
+
+  // Save to CRM (vastu_audits table)
+  const sc = computeVastuScore();
+  sbA.from('vastu_audits').insert({
+    ref_id: id,
+    audit_date: tv('f-date') || new Date().toISOString().split('T')[0],
+    inspector_name: tv('f-iname'),
+    client_name: tv('f-cl-name'),
+    contact_person: tv('f-cl-contact'),
+    mobile: tv('f-cl-phone'),
+    email: tv('f-cl-email'),
+    client_city: tv('f-cl-city'),
+    property_name: tv('f-propname'),
+    property_type: FD['prop-type'],
+    property_city: tv('f-city'),
+    property_state: tv('f-state'),
+    builtup_area: tv('f-bua'),
+    floors: (tv('f-floors-up')||'0') + '/' + (tv('f-floors-dn')||'0'),
+    svr_score: sc.answered ? sc.score : null,
+    svr_grade: sc.answered ? (sc.score>=80?'Strong':sc.score>=55?'Moderate':'Weak') : null,
+    verdict: FD['verdict'] || null,
+    key_positives: tv('f-pos') || null,
+    key_issues: tv('f-neg') || null,
+    critical_issues: tv('f-crit') || null,
+    overall_remarks: tv('f-rem') || null,
+    form_data: payload
+  }).then(({ error }) => {
+    if (error) console.error('CRM save failed:', error.message);
+    else console.log('Saved to CRM: ' + id);
+  });
 
   document.querySelectorAll('.step').forEach(s=>s.style.display='none');
   document.getElementById('nav').style.display='none';
