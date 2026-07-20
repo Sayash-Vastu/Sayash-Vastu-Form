@@ -1188,6 +1188,7 @@ const MS={};
 function enterForm(type,icon){
   FD['prop-type']=type;
   document.getElementById('intro').classList.add('hide');
+  document.getElementById('intro').style.display='none';
   document.getElementById('formwrap').classList.add('on');
   document.getElementById('sel-type-name').textContent=(icon?icon+' ':'')+type;
   cur=0;
@@ -1199,6 +1200,7 @@ function enterForm(type,icon){
 function showIntro(){
   document.getElementById('formwrap').classList.remove('on');
   document.getElementById('intro').classList.remove('hide');
+  document.getElementById('intro').style.display='block';
   window.scrollTo(0,0);
 }
 
