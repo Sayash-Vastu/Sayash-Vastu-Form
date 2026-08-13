@@ -1255,8 +1255,56 @@ function updUI(){
   if(cur===STEPS-1)buildSum();
 }
 
+// ══ REQUIRED FIELD VALIDATION ══
+const REQUIRED=[
+  {id:'f-cl-name',   label:'Client Name'},
+  {id:'f-cl-phone',  label:'Client Mobile'},
+  {id:'f-iname',     label:'Inspector Name'},
+  {id:'f-propname',  label:'Property Name'},
+  {id:'f-city',      label:'Property City'},
+  {id:'f-date',      label:'Visit Date'}
+];
+const REQUIRED_FD=[{key:'prop-type',label:'Property Type'},{key:'facing',label:'Building Facing'},{key:'verdict',label:'Final Verdict'}];
+
+function validateForm(){
+  const miss=[];
+  let firstEl=null;
+  REQUIRED.forEach(f=>{
+    const el=document.getElementById(f.id);
+    if(!el)return;
+    if(!String(el.value||'').trim()){
+      miss.push(f.label);
+      el.style.borderColor='#c0392b';
+      el.style.background='#fdeceb';
+      if(!firstEl)firstEl=el;
+    }else{
+      el.style.borderColor='';
+      el.style.background='';
+    }
+  });
+  REQUIRED_FD.forEach(f=>{ if(!FD[f.key]) miss.push(f.label); });
+  if(miss.length){
+    alert('Yeh fields bharni zaroori hain:\n\n• '+miss.join('\n• '));
+    if(firstEl){
+      const st=firstEl.closest('.step');
+      if(st){
+        const n=+String(st.id).replace('st','');
+        if(!isNaN(n)&&n!==cur){
+          document.getElementById('st'+cur).classList.remove('on');
+          cur=n;
+          document.getElementById('st'+cur).classList.add('on');
+          updUI();
+        }
+      }
+      setTimeout(()=>{firstEl.scrollIntoView({behavior:'smooth',block:'center'});firstEl.focus();},120);
+    }
+    return false;
+  }
+  return true;
+}
+
 function go(d){
-  if(d===1&&cur===STEPS-1){submit();return;}
+  if(d===1&&cur===STEPS-1){ if(!validateForm())return; submit();return;}
   if(d===-1&&cur===0){showIntro();return;}
   document.getElementById('st'+cur).classList.remove('on');
   cur=Math.max(0,Math.min(STEPS-1,cur+d));
@@ -1712,11 +1760,9 @@ document.getElementById('report-doc').innerHTML = buildReportHTML(id);
 
 document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
 initPointerPhotos();
-  vtFillSelect('ppt-tpl');
 var _pn=document.getElementById('f-propname'); if(_pn) _pn.addEventListener('blur', checkPrevAudit);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="vastu-ppt.js"></script>
-  <script src="vastu-templates.js"></script>
 </body>
 </html>
