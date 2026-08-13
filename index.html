@@ -1183,7 +1183,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
       </select>
       <button class="btn-print" id="ppt-btn" style="flex:1;background:#8a6d2f" onclick="generateVastuPPT()">📊 Download PPT</button>
     </div>
-    <div style="font-size:10.5px;color:var(--muted);text-align:center;margin-top:6px">Destination mein "Save as PDF" select karo · Headers and footers UNCHECK karo</div>
+    <div style="font-size:10.5px;color:var(--muted);text-align:center;margin-top:6px">Choose "Save as PDF" as destination · UNCHECK headers and footers</div>
   </div>
   <div id="report-doc"></div>
   <button class="btn-new" onclick="location.reload()">+ New Audit</button>
@@ -1284,7 +1284,7 @@ function validateForm(){
   });
   REQUIRED_FD.forEach(f=>{ if(!FD[f.key]) miss.push(f.label); });
   if(miss.length){
-    alert('Yeh fields bharni zaroori hain:\n\n• '+miss.join('\n• '));
+    alert('Please fill in the following required fields:\n\n• '+miss.join('\n• '));
     if(firstEl){
       const st=firstEl.closest('.step');
       if(st){
@@ -1484,9 +1484,9 @@ function showPrevBar(hit){
   d.id='prev-bar'; d.className='prev-bar';
   const dt=hit.audit_date?new Date(hit.audit_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'';
   d.innerHTML='🔁 <b>Previous audit found</b> — '+(hit.property_name||'')+(hit.client_name?' ('+hit.client_name+')':'')+
-    (dt?' · '+dt:'')+'<div style="font-size:12px;color:#6b6152;margin-top:4px">Kya yeh usi property ka follow-up visit hai?</div>'+
-    '<div class="prev-actions"><button class="prev-yes" onclick="acceptPrev()">Haan, yehi hai</button>'+
-    '<button onclick="rejectPrev()">Nahi, nayi site hai</button></div>';
+    (dt?' · '+dt:'')+'<div style="font-size:12px;color:#6b6152;margin-top:4px">Is this a follow-up visit to the same property?</div>'+
+    '<div class="prev-actions"><button class="prev-yes" onclick="acceptPrev()">Yes, same property</button>'+
+    '<button onclick="rejectPrev()">No, new site</button></div>';
   host.parentNode.insertBefore(d, host.nextSibling);
 }
 
@@ -1501,7 +1501,7 @@ function acceptPrev(){
   });
   PREV={date:hit.audit_date?new Date(hit.audit_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'', ref:hit.ref_id, vals:vals, notes:(fd.pointer_notes||{})};
   const b=document.getElementById('prev-bar');
-  if(b){ b.innerHTML='✅ <b>Linked to previous audit</b> ('+PREV.date+') — pichli baar ke pending issues highlight honge.'; }
+  if(b){ b.innerHTML='✅ <b>Linked to previous audit</b> ('+PREV.date+') — pending issues from the last visit will be highlighted.'; }
   Object.keys(vals).forEach(k=>{ if(FD[k]) showRepeatWarn(k); });
 }
 function rejectPrev(){ PREV=null; PREV_CANDIDATE=null; const b=document.getElementById('prev-bar'); if(b)b.remove(); }
@@ -1516,14 +1516,14 @@ function showRepeatWarn(key){
   const hid=document.getElementById(key); if(!hid) return;
   const d=document.createElement('div');
   d.id='rw-'+key; d.className='repeat-warn';
-  d.textContent='⚠️ Yeh '+PREV.date+' ki visit mein bhi isi tarah mark tha — abhi tak rectify nahi hua.';
+  d.textContent='⚠️ Also flagged on the '+PREV.date+' visit — still not rectified.';
   hid.parentNode.insertBefore(d, hid.nextSibling);
 }
 
 function repeatNote(key){
   if(!PREV||!PREV.vals[key]||!FD[key]) return '';
   if(vnorm(PREV.vals[key])!==vnorm(FD[key])||!isProblem(FD[key])) return '';
-  return '<div class="rep-repeat">⚠️ Repeat issue — '+PREV.date+' ki visit mein bhi yahi tha, abhi tak pending.</div>';
+  return '<div class="rep-repeat">⚠️ Repeat issue — also flagged on '+PREV.date+', still pending.</div>';
 }
 
 function tv(id){return(document.getElementById(id)||{}).value||'';}
