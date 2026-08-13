@@ -62,7 +62,7 @@ async function generateVastuPPT(tplKey){
   const btn = document.getElementById('ppt-btn');
   const setTxt = t => { if(btn) btn.textContent = t; };
   try{
-    if(typeof JSZip==='undefined'){ alert('JSZip load nahi hua'); return; }
+    if(typeof JSZip==='undefined'){ alert('JSZip failed to load'); return; }
     setTxt('⏳ Building PPT...');
 
     const propName = tv('f-propname') || 'Property';
@@ -76,7 +76,7 @@ async function generateVastuPPT(tplKey){
       .filter(k => (PN[k] && PN[k].trim()) || (PP[k] && PP[k].length))
       .map(k => ({ key:k, label:FIELD_LABELS[k], val:FD[k]||'', note:(PN[k]||'').trim(), photos:PP[k]||[] }));
 
-    if(!items.length){ alert('Koi observation ya photo nahi mila.\nPointers par observation likho ya photo add karo.'); setTxt('📊 Download PPT'); return; }
+    if(!items.length){ alert('No observations or photos found.\nPlease add an observation or photo to at least one point.'); setTxt('📊 Download PPT'); return; }
 
     const zip = await JSZip.loadAsync(await (await fetch(T.file)).arrayBuffer());
 
@@ -169,7 +169,7 @@ async function generateVastuPPT(tplKey){
     setTxt('📊 Download PPT');
   }catch(e){
     console.error(e);
-    alert('PPT banane mein dikkat: '+e.message);
+    alert('Could not generate PPT: '+e.message);
     setTxt('📊 Download PPT');
   }
 }
