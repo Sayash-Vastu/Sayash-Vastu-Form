@@ -1712,9 +1712,11 @@ document.getElementById('report-doc').innerHTML = buildReportHTML(id);
 
 document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
 initPointerPhotos();
+  vtFillSelect('ppt-tpl');
 var _pn=document.getElementById('f-propname'); if(_pn) _pn.addEventListener('blur', checkPrevAudit);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="vastu-ppt.js"></script>
+  <script src="vastu-templates.js"></script>
 </body>
 </html>
