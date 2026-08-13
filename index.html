@@ -294,6 +294,13 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .rep-photos img{width:150px;height:112px;object-fit:cover;border-radius:6px;border:1px solid #e3ddd0}
 .rep-note{font-size:12.5px;color:#5c5344;font-style:italic;margin:5px 0 3px;padding-left:9px;border-left:2px solid #d9c9a3}
 @media print{.rep-photos img{width:135px;height:100px}}
+.prev-bar{margin:12px 0;padding:12px 14px;border-radius:11px;background:#fff8e6;border:1px solid #e8d9a8}
+.prev-bar b{color:#8a6d2f}
+.prev-actions{display:flex;gap:8px;margin-top:9px}
+.prev-actions button{padding:7px 14px;border-radius:8px;border:1px solid #d9d2c2;background:#fff;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600}
+.prev-yes{background:#8a6d2f !important;color:#fff !important;border-color:#8a6d2f !important}
+.repeat-warn{margin-top:8px;padding:8px 11px;border-radius:8px;background:#fdeceb;border-left:3px solid #c0392b;font-size:12.5px;color:#8c2f26;font-weight:600}
+.rep-repeat{font-size:12px;color:#8c2f26;font-weight:700;margin:4px 0 2px}
 </style>
 </head>
 <body>
@@ -1265,6 +1272,7 @@ function chip(el,key,val,cls){
   document.getElementById(key)&&(document.getElementById(key).value=val);
   FD[key]=val;
   FS[key]=cls;
+  showRepeatWarn(key);
 }
 
 function opt(el,key,val,cls){
@@ -1275,6 +1283,7 @@ function opt(el,key,val,cls){
   document.getElementById(key)&&(document.getElementById(key).value=val);
   FD[key]=val;
   FS[key]=cls||'g';
+  showRepeatWarn(key);
 }
 
 function dirBtn(el,key,val,cls){
@@ -1377,10 +1386,98 @@ async function uploadPointerPhotos(refId){
 }
 function pwExtra(key){
   var x='';
+  x+=repeatNote(key);
   if(PN[key]&&PN[key].trim())x+='<div class="rep-note">'+PN[key].trim()+'</div>';
   if(PP[key]&&PP[key].length)x+='<div class="rep-photos">'+PP[key].map(function(d){return '<img src="'+d+'">';}).join('')+'</div>';
   return x;
 }
+// ══ REPEAT ISSUE DETECTION ══
+const PREVMAP={facing:['facing','direction'],corner:['facing','corner'],'setback-bal':['building','setback_balance'],
+ brahma:['building','brahmasthan'],'stair-zone':['cores','staircase_zone'],'stair-dir':['cores','staircase_direction'],
+ 'lift-zone':['cores','lift_zone'],'toilet-ne':['cores','toilet_ne_check'],'dg-zone':['utilities','dg_zone'],
+ 'stp-zone':['utilities','stp_zone'],'ugt-zone':['utilities','ugt_zone'],'oht-zone':['utilities','oht_zone'],
+ 'entry-dir':['access','entry_direction'],'entry-pos':['access','entry_position'],'ramp-zone':['access','ramp_zone'],
+ 'ramp-slope':['access','ramp_slope'],drain2:['surroundings','drainage'],water2:['surroundings','water_body'],
+ pole2:['surroundings','pole'],ht2:['surroundings','ht_wire'],temple2:['surroundings','temple'],cem2:['surroundings','cemetery']};
+let PREV=null;           // {date, ref, vals:{key:val}}
+let PREV_CANDIDATE=null;
+
+function vnorm(s){return String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
+function isProblem(v){
+  const t=String(v||'');
+  return /✗|Not Recommended|Not Rec|Unfavourable|Major|Issue|Avoid|Defect|Obstruct/i.test(t);
+}
+
+async function checkPrevAudit(){
+  const prop=tv('f-propname'), cl=tv('f-cl-name');
+  if(!prop || prop.length<3) return;
+  try{
+    const {data}=await sbA.from('vastu_audits').select('ref_id,audit_date,client_name,property_name,form_data').order('audit_date',{ascending:false}).limit(60);
+    if(!data||!data.length) return;
+    const np=vnorm(prop), nc=vnorm(cl);
+    const hit=data.find(r=>{
+      const rp=vnorm(r.property_name);
+      if(!rp||!np) return false;
+      const propOk = rp===np || rp.includes(np) || np.includes(rp);
+      const clOk = !nc || !vnorm(r.client_name) || vnorm(r.client_name)===nc || vnorm(r.client_name).includes(nc) || nc.includes(vnorm(r.client_name));
+      return propOk && clOk;
+    });
+    if(!hit) return;
+    PREV_CANDIDATE=hit;
+    showPrevBar(hit);
+  }catch(e){ console.error('prev audit check',e); }
+}
+
+function showPrevBar(hit){
+  if(document.getElementById('prev-bar')) return;
+  const host=document.getElementById('f-propname');
+  if(!host) return;
+  const d=document.createElement('div');
+  d.id='prev-bar'; d.className='prev-bar';
+  const dt=hit.audit_date?new Date(hit.audit_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'';
+  d.innerHTML='🔁 <b>Previous audit found</b> — '+(hit.property_name||'')+(hit.client_name?' ('+hit.client_name+')':'')+
+    (dt?' · '+dt:'')+'<div style="font-size:12px;color:#6b6152;margin-top:4px">Kya yeh usi property ka follow-up visit hai?</div>'+
+    '<div class="prev-actions"><button class="prev-yes" onclick="acceptPrev()">Haan, yehi hai</button>'+
+    '<button onclick="rejectPrev()">Nahi, nayi site hai</button></div>';
+  host.parentNode.insertBefore(d, host.nextSibling);
+}
+
+function acceptPrev(){
+  const hit=PREV_CANDIDATE; if(!hit) return;
+  const fd=hit.form_data||{};
+  const vals={};
+  Object.keys(PREVMAP).forEach(k=>{
+    const m=PREVMAP[k];
+    const v=(fd[m[0]]&&fd[m[0]][m[1]])||'';
+    if(v) vals[k]=v;
+  });
+  PREV={date:hit.audit_date?new Date(hit.audit_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'', ref:hit.ref_id, vals:vals, notes:(fd.pointer_notes||{})};
+  const b=document.getElementById('prev-bar');
+  if(b){ b.innerHTML='✅ <b>Linked to previous audit</b> ('+PREV.date+') — pichli baar ke pending issues highlight honge.'; }
+  Object.keys(vals).forEach(k=>{ if(FD[k]) showRepeatWarn(k); });
+}
+function rejectPrev(){ PREV=null; PREV_CANDIDATE=null; const b=document.getElementById('prev-bar'); if(b)b.remove(); }
+
+function showRepeatWarn(key){
+  const old=document.getElementById('rw-'+key); if(old) old.remove();
+  if(!PREV||!PREV.vals[key]) return;
+  const prevV=PREV.vals[key], nowV=FD[key];
+  if(!nowV) return;
+  if(vnorm(prevV)!==vnorm(nowV)) return;
+  if(!isProblem(nowV)) return;
+  const hid=document.getElementById(key); if(!hid) return;
+  const d=document.createElement('div');
+  d.id='rw-'+key; d.className='repeat-warn';
+  d.textContent='⚠️ Yeh '+PREV.date+' ki visit mein bhi isi tarah mark tha — abhi tak rectify nahi hua.';
+  hid.parentNode.insertBefore(d, hid.nextSibling);
+}
+
+function repeatNote(key){
+  if(!PREV||!PREV.vals[key]||!FD[key]) return '';
+  if(vnorm(PREV.vals[key])!==vnorm(FD[key])||!isProblem(FD[key])) return '';
+  return '<div class="rep-repeat">⚠️ Repeat issue — '+PREV.date+' ki visit mein bhi yahi tha, abhi tak pending.</div>';
+}
+
 function tv(id){return(document.getElementById(id)||{}).value||'';}
 
 function buildSum(){
@@ -1615,6 +1712,7 @@ document.getElementById('report-doc').innerHTML = buildReportHTML(id);
 
 document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
 initPointerPhotos();
+var _pn=document.getElementById('f-propname'); if(_pn) _pn.addEventListener('blur', checkPrevAudit);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="vastu-ppt.js"></script>
