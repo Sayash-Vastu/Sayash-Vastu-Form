@@ -279,6 +279,21 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   .report-doc{box-shadow:none!important;border:none!important;margin:0!important;}
   @page{margin:12mm;}
 }
+.pw{margin-top:10px;padding-top:9px;border-top:1px dashed #e3ddd0}
+.pw-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pw-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border:1px solid #d9d2c2;border-radius:9px;background:#fdfcf9;cursor:pointer;font-size:12.5px;font-weight:600;color:#6b6152;transition:.15s}
+.pw-btn:hover{border-color:#b9985a;color:#8a6d2f;background:#fffdf6}
+.pw-btn.has{border-color:#b9985a;background:#fdf6e6;color:#8a6d2f}
+.pw-note{width:100%;margin-top:8px;padding:9px 11px;border:1px solid #e3ddd0;border-radius:9px;font:inherit;font-size:13px;background:#fdfcf9;resize:vertical;min-height:44px}
+.pw-note:focus{outline:none;border-color:#b9985a;background:#fff}
+.pw-thumbs{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.pw-th{position:relative;width:66px;height:66px;border-radius:8px;overflow:hidden;border:1px solid #e3ddd0}
+.pw-th img{width:100%;height:100%;object-fit:cover;display:block}
+.pw-x{position:absolute;top:2px;right:2px;width:19px;height:19px;border-radius:50%;background:rgba(0,0,0,.62);color:#fff;border:0;cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center}
+.rep-photos{display:flex;gap:8px;flex-wrap:wrap;margin:7px 0 3px}
+.rep-photos img{width:150px;height:112px;object-fit:cover;border-radius:6px;border:1px solid #e3ddd0}
+.rep-note{font-size:12.5px;color:#5c5344;font-style:italic;margin:5px 0 3px;padding-left:9px;border-left:2px solid #d9c9a3}
+@media print{.rep-photos img{width:135px;height:100px}}
 </style>
 </head>
 <body>
@@ -1281,6 +1296,83 @@ function handlePhotos(inp){
   });
 }
 
+// PHOTOS + OBSERVATIONS
+const PP={},PN={};
+function initPointerPhotos(){
+  Object.keys(FIELD_LABELS).forEach(function(key){
+    var hid=document.getElementById(key);
+    if(!hid||hid.dataset.pwDone)return;
+    hid.dataset.pwDone='1';
+    var box=document.createElement('div');
+    box.className='pw';
+    box.innerHTML='<div class="pw-bar"><div class="pw-btn" id="pwb-'+key+'" onclick="document.getElementById(\'pwf-'+key+'\').click()">\u{1F4F7} Photo add karo</div><input type="file" id="pwf-'+key+'" accept="image/*" multiple capture="environment" style="display:none" onchange="addPointerPhotos(this,\''+key+'\')"></div><textarea class="pw-note" id="pwn-'+key+'" placeholder="Is point par observation (report mein aayega)..." oninput="PN[\''+key+'\']=this.value"></textarea><div class="pw-thumbs" id="pwt-'+key+'"></div>';
+    hid.parentNode.insertBefore(box,hid.nextSibling);
+  });
+}
+function compressImg(file){
+  return new Promise(function(res){
+    var rd=new FileReader();
+    rd.onload=function(e){
+      var im=new Image();
+      im.onload=function(){
+        var MAX=1600,w=im.width,h=im.height;
+        if(w>MAX||h>MAX){if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;}}
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(im,0,0,w,h);
+        res(c.toDataURL('image/jpeg',0.75));
+      };
+      im.onerror=function(){res(null);};
+      im.src=e.target.result;
+    };
+    rd.readAsDataURL(file);
+  });
+}
+async function addPointerPhotos(inp,key){
+  var btn=document.getElementById('pwb-'+key);
+  var files=Array.prototype.slice.call(inp.files||[]);
+  if(!files.length)return;
+  btn.textContent='\u23F3 Ho raha hai...';
+  if(!PP[key])PP[key]=[];
+  for(var i=0;i<files.length;i++){var d=await compressImg(files[i]);if(d)PP[key].push(d);}
+  inp.value='';
+  renderPointerThumbs(key);
+}
+function renderPointerThumbs(key){
+  var wrap=document.getElementById('pwt-'+key),btn=document.getElementById('pwb-'+key);
+  var list=PP[key]||[];
+  wrap.innerHTML=list.map(function(d,i){return '<div class="pw-th"><img src="'+d+'"><button class="pw-x" onclick="delPointerPhoto(\''+key+'\','+i+')">\u00D7</button></div>';}).join('');
+  btn.textContent=list.length?('\u{1F4F7} '+list.length+' photo'+(list.length>1?'s':'')+' \u00B7 aur add karo'):'\u{1F4F7} Photo add karo';
+  btn.className=list.length?'pw-btn has':'pw-btn';
+}
+function delPointerPhoto(key,i){
+  PP[key].splice(i,1);
+  if(!PP[key].length)delete PP[key];
+  renderPointerThumbs(key);
+}
+async function uploadPointerPhotos(refId){
+  var out={};
+  var keys=Object.keys(PP);
+  for(var k=0;k<keys.length;k++){
+    var key=keys[k];out[key]=[];
+    for(var i=0;i<PP[key].length;i++){
+      try{
+        var blob=await (await fetch(PP[key][i])).blob();
+        var path=refId+'/'+key+'-'+(i+1)+'.jpg';
+        var r=await sbA.storage.from('vastu-photos').upload(path,blob,{contentType:'image/jpeg',upsert:true});
+        if(r.error){console.error('upload fail',path,r.error.message);continue;}
+        var u=sbA.storage.from('vastu-photos').getPublicUrl(path);
+        out[key].push(u.data.publicUrl);
+      }catch(e){console.error('upload err',e);}
+    }
+  }
+  return out;
+}
+function pwExtra(key){
+  var x='';
+  if(PN[key]&&PN[key].trim())x+='<div class="rep-note">'+PN[key].trim()+'</div>';
+  if(PP[key]&&PP[key].length)x+='<div class="rep-photos">'+PP[key].map(function(d){return '<img src="'+d+'">';}).join('')+'</div>';
+  return x;
+}
 function tv(id){return(document.getElementById(id)||{}).value||'';}
 
 function buildSum(){
@@ -1356,18 +1448,18 @@ function renderAIScore(){
 
 function fld(key,label){
   const v=FD[key];
-  if(!v)return '';
+  if(!v)return pwExtra(key)?'<div class="report-row"><span class="rr-k">'+label+'</span><span class="rr-v">\u2014</span></div>'+pwExtra(key):'';
   let cl='';
   if(v.includes('✓')||v.includes('Best')||v.includes('Suitable')||v.includes('Auspicious')||v.includes('Correct')||v.includes('Good')||v.includes('Clear')||v.includes('None'))cl='g';
   else if(v.includes('✗')||v.includes('Not Recommended')||v.includes('Issue')||v.includes('Avoid'))cl='r';
   else if(v.includes('⚠'))cl='a';
-  return '<div class="report-row"><span class="rr-k">'+label+'</span><span class="rr-v '+cl+'">'+v+'</span></div>';
+  return '<div class="report-row"><span class="rr-k">'+label+'</span><span class="rr-v '+cl+'">'+v+'</span></div>'+pwExtra(key);
 }
 
 function fldMulti(key,label){
   const v=FD[key];
-  if(!v)return '';
-  return '<div class="report-row"><span class="rr-k">'+label+'</span><span class="rr-v">'+v+'</span></div>';
+  if(!v&&!pwExtra(key))return '';
+  return '<div class="report-row"><span class="rr-k">'+label+'</span><span class="rr-v">'+(v||'\u2014')+'</span></div>'+pwExtra(key);
 }
 
 function buildReportHTML(id){
@@ -1450,7 +1542,7 @@ function buildReportHTML(id){
 
 function genId(){return'SVA-'+Math.random().toString(36).substr(2,6).toUpperCase()+'-'+new Date().getFullYear();}
 
-function submit(){
+async function submit(){
   const id=genId();
   const payload={
     submission_id:id,
@@ -1472,6 +1564,10 @@ function submit(){
   console.log('MIS PAYLOAD →',JSON.stringify(payload,null,2));
 
   // Save to CRM (vastu_audits table)
+  const photoUrls = await uploadPointerPhotos(id);
+  payload.pointer_photos = photoUrls;
+  payload.pointer_notes = PN;
+
   const sc = computeVastuScore();
   sbA.from('vastu_audits').insert({
     ref_id: id,
@@ -1510,6 +1606,7 @@ document.getElementById('report-doc').innerHTML = buildReportHTML(id);
 }
 
 document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+initPointerPhotos();
 </script>
 </body>
 </html>
