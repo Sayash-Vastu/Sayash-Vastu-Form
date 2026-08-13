@@ -1305,7 +1305,7 @@ function initPointerPhotos(){
     hid.dataset.pwDone='1';
     var box=document.createElement('div');
     box.className='pw';
-    box.innerHTML='<div class="pw-bar"><div class="pw-btn" id="pwb-'+key+'" onclick="document.getElementById(\'pwf-'+key+'\').click()">\u{1F4F7} Photo add karo</div><input type="file" id="pwf-'+key+'" accept="image/*" multiple capture="environment" style="display:none" onchange="addPointerPhotos(this,\''+key+'\')"></div><textarea class="pw-note" id="pwn-'+key+'" placeholder="Is point par observation (report mein aayega)..." oninput="PN[\''+key+'\']=this.value"></textarea><div class="pw-thumbs" id="pwt-'+key+'"></div>';
+    box.innerHTML='<div class="pw-bar"><div class="pw-btn" id="pwb-'+key+'" onclick="document.getElementById(\'pwf-'+key+'\').click()">\u{1F4F7} Add Photos</div><input type="file" id="pwf-'+key+'" accept="image/*" multiple capture="environment" style="display:none" onchange="addPointerPhotos(this,\''+key+'\')"></div><textarea class="pw-note" id="pwn-'+key+'" placeholder="Observation for this point (appears in report)..." oninput="PN[\''+key+'\']=this.value"></textarea><div class="pw-thumbs" id="pwt-'+key+'"></div>';
     hid.parentNode.insertBefore(box,hid.nextSibling);
   });
 }
@@ -1331,7 +1331,7 @@ async function addPointerPhotos(inp,key){
   var btn=document.getElementById('pwb-'+key);
   var files=Array.prototype.slice.call(inp.files||[]);
   if(!files.length)return;
-  btn.textContent='\u23F3 Ho raha hai...';
+  btn.textContent='\u23F3 Processing...';
   if(!PP[key])PP[key]=[];
   for(var i=0;i<files.length;i++){var d=await compressImg(files[i]);if(d)PP[key].push(d);}
   inp.value='';
@@ -1341,7 +1341,7 @@ function renderPointerThumbs(key){
   var wrap=document.getElementById('pwt-'+key),btn=document.getElementById('pwb-'+key);
   var list=PP[key]||[];
   wrap.innerHTML=list.map(function(d,i){return '<div class="pw-th"><img src="'+d+'"><button class="pw-x" onclick="delPointerPhoto(\''+key+'\','+i+')">\u00D7</button></div>';}).join('');
-  btn.textContent=list.length?('\u{1F4F7} '+list.length+' photo'+(list.length>1?'s':'')+' \u00B7 aur add karo'):'\u{1F4F7} Photo add karo';
+  btn.textContent=list.length?('\u{1F4F7} '+list.length+' photo'+(list.length>1?'s':'')+' \u00B7 add more'):'\u{1F4F7} Add Photos';
   btn.className=list.length?'pw-btn has':'pw-btn';
 }
 function delPointerPhoto(key,i){
