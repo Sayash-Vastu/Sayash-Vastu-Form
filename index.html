@@ -1168,6 +1168,14 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
   <div class="suc-sub">Review, print, or save this audit report below.</div>
   <div class="report-actions" style="flex-direction:column">
     <button class="btn-print" onclick="window.print()">📄 Save as PDF</button>
+    <div style="display:flex;gap:8px;margin-top:9px">
+      <select id="ppt-tpl" style="flex:1;padding:11px;border-radius:9px;border:1px solid #d9d2c2;font:inherit;font-size:13px;background:#fdfcf9">
+        <option value="ckpc">CKPC Properties</option>
+        <option value="max">MAX Healthcare</option>
+        <option value="sg">Signature Global</option>
+      </select>
+      <button class="btn-print" id="ppt-btn" style="flex:1;background:#8a6d2f" onclick="generateVastuPPT()">📊 Download PPT</button>
+    </div>
     <div style="font-size:10.5px;color:var(--muted);text-align:center;margin-top:6px">Destination mein "Save as PDF" select karo · Headers and footers UNCHECK karo</div>
   </div>
   <div id="report-doc"></div>
@@ -1608,5 +1616,7 @@ document.getElementById('report-doc').innerHTML = buildReportHTML(id);
 document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
 initPointerPhotos();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="vastu-ppt.js"></script>
 </body>
 </html>
