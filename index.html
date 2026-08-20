@@ -1370,7 +1370,7 @@ function initPointerPhotos(){
     hid.dataset.pwDone='1';
     var box=document.createElement('div');
     box.className='pw';
-    box.innerHTML='<div class="pw-bar"><div class="pw-btn" id="pwb-'+key+'" onclick="document.getElementById(\'pwf-'+key+'\').click()">\u{1F4F7} Add Photos</div><input type="file" id="pwf-'+key+'" accept="image/*" multiple capture="environment" style="display:none" onchange="addPointerPhotos(this,\''+key+'\')"></div><textarea class="pw-note" id="pwn-'+key+'" placeholder="Observation for this point (appears in report)..." oninput="PN[\''+key+'\']=this.value"></textarea><div class="pw-thumbs" id="pwt-'+key+'"></div>';
+    box.innerHTML='<div class="pw-bar"><div class="pw-btn" id="pwb-'+key+'" onclick="document.getElementById(\'pwf-'+key+'\').click()">\u{1F4F7} Add Photos</div><input type="file" id="pwf-'+key+'" accept="image/*" multiple style="display:none" onchange="addPointerPhotos(this,\''+key+'\')"></div><textarea class="pw-note" id="pwn-'+key+'" placeholder="Observation for this point (appears in report)..." oninput="PN[\''+key+'\']=this.value"></textarea><div class="pw-thumbs" id="pwt-'+key+'"></div>';
     hid.parentNode.insertBefore(box,hid.nextSibling);
   });
 }
