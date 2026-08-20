@@ -1695,7 +1695,12 @@ function buildReportHTML(id){
 
 function genId(){return'SVA-'+Math.random().toString(36).substr(2,6).toUpperCase()+'-'+new Date().getFullYear();}
 
+let _submitting=false;
 async function submit(){
+  if(_submitting) return;
+  _submitting=true;
+  var _sb=document.getElementById('btn-n');
+  if(_sb){_sb.disabled=true;_sb.style.opacity='.6';_sb.textContent='Saving…';}
   const id=genId();
   const payload={
     submission_id:id,
